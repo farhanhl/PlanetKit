@@ -397,6 +397,14 @@ const toolDefs = [
     descKey: 'imageFiltersCard.desc',
     anim: 'anim-sparkle',
   },
+  {
+    href: '/tools/image-exif-editor',
+    icon: Eye,
+    category: 'Enhance' as Tab,
+    titleKey: 'exifEditorCard.title',
+    descKey: 'exifEditorCard.desc',
+    anim: 'anim-scan',
+  },
   // Optimize
   {
     href: '/tools/compress-pdf',

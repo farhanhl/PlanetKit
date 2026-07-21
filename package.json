@@ -27,6 +27,7 @@
     "next": "16.2.10",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^6.1.200",
+    "piexifjs": "^1.0.6",
     "pptxgenjs": "^4.0.1",
     "puppeteer": "^25.3.0",
     "puppeteer-extra": "^3.3.6",
