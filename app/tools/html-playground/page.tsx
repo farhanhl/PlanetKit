@@ -126,7 +126,7 @@ export default function HtmlPlaygroundPage() {
             <iframe
               ref={iframeRef}
               className="h-[432px] w-full rounded-xl border border-border bg-white"
-              sandbox="allow-scripts"
+              sandbox="allow-scripts allow-same-origin"
               title="Preview"
             />
           </div>

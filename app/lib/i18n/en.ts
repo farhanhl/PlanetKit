@@ -1149,6 +1149,36 @@ const en = {
   playgroundTitle: "HTML/CSS Playground",
   playgroundDesc: "Write HTML, CSS, and JavaScript with a live preview. Perfect for testing and prototyping.",
   playgroundPreview: "Live Preview",
+
+  // JS Playground
+  jsPlaygroundCard: { title: "JS Playground", desc: "Run JavaScript code with live console output." },
+  jsPlaygroundTitle: "JavaScript Playground",
+  jsPlaygroundDesc: "Write and run JavaScript code in the browser. See console output instantly.",
+  jsPlaygroundRun: "Run",
+  jsPlaygroundRunning: "Running...",
+  jsPlaygroundClear: "Clear",
+  jsPlaygroundOutput: "Console Output",
+  jsPlaygroundEmpty: "Click Run to see output.",
+  jsPlaygroundPlaceholder: "Write JavaScript here...",
+
+  // Python Playground
+  pythonPlaygroundCard: { title: "Python Playground", desc: "Run Python code in the browser with Pyodide." },
+  pythonPlaygroundTitle: "Python Playground",
+  pythonPlaygroundDesc: "Write and run Python 3 code directly in your browser. Powered by Pyodide (WASM).",
+  pythonPlaygroundLoading: "Loading Python...",
+  pythonPlaygroundPlaceholder: "Write Python here...",
+  pythonPlaygroundNote: "First run loads Pyodide (~6MB) from CDN. Subsequent runs are instant.",
+
+  // SQL Playground
+  sqlPlaygroundCard: { title: "SQL Playground", desc: "Run SQL queries with a sample SQLite database." },
+  sqlPlaygroundTitle: "SQL Playground",
+  sqlPlaygroundDesc: "Write and run SQL queries against a sample SQLite database with users, products, and orders.",
+  sqlPlaygroundRun: "Run Query",
+  sqlPlaygroundReset: "Reset DB",
+  sqlPlaygroundLoading: "Loading DB...",
+  sqlPlaygroundResults: "Query Results",
+  sqlPlaygroundTables: "Tables:",
+  sqlPlaygroundPlaceholder: "Write SQL here...",
 } as const;
 
 type TranslationValue = string | ((...args: never[]) => string);

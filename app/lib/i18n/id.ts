@@ -1151,6 +1151,36 @@ const id: Translations = {
   playgroundTitle: "HTML/CSS Playground",
   playgroundDesc: "Tulis HTML, CSS, dan JavaScript dengan live preview. Sempurna untuk testing dan prototyping.",
   playgroundPreview: "Live Preview",
+
+  // JS Playground
+  jsPlaygroundCard: { title: "JS Playground", desc: "Jalankan kode JavaScript dengan output konsol live." },
+  jsPlaygroundTitle: "JavaScript Playground",
+  jsPlaygroundDesc: "Tulis dan jalankan kode JavaScript di browser. Lihat output konsol secara instan.",
+  jsPlaygroundRun: "Jalankan",
+  jsPlaygroundRunning: "Berjalan...",
+  jsPlaygroundClear: "Hapus",
+  jsPlaygroundOutput: "Output Konsol",
+  jsPlaygroundEmpty: "Klik Jalankan untuk melihat output.",
+  jsPlaygroundPlaceholder: "Tulis JavaScript di sini...",
+
+  // Python Playground
+  pythonPlaygroundCard: { title: "Python Playground", desc: "Jalankan kode Python di browser dengan Pyodide." },
+  pythonPlaygroundTitle: "Python Playground",
+  pythonPlaygroundDesc: "Tulis dan jalankan kode Python 3 langsung di browser Anda. Didukung oleh Pyodide (WASM).",
+  pythonPlaygroundLoading: "Memuat Python...",
+  pythonPlaygroundPlaceholder: "Tulis Python di sini...",
+  pythonPlaygroundNote: "Run pertama memuat Pyodide (~6MB) dari CDN. Run berikutnya instan.",
+
+  // SQL Playground
+  sqlPlaygroundCard: { title: "SQL Playground", desc: "Jalankan query SQL dengan database SQLite sample." },
+  sqlPlaygroundTitle: "SQL Playground",
+  sqlPlaygroundDesc: "Tulis dan jalankan query SQL pada database SQLite sample dengan tabel users, products, dan orders.",
+  sqlPlaygroundRun: "Jalankan Query",
+  sqlPlaygroundReset: "Reset DB",
+  sqlPlaygroundLoading: "Memuat DB...",
+  sqlPlaygroundResults: "Hasil Query",
+  sqlPlaygroundTables: "Tabel:",
+  sqlPlaygroundPlaceholder: "Tulis SQL di sini...",
 };
 
 export default id;

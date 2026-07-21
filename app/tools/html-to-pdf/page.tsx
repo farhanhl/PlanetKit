@@ -23,68 +23,62 @@ export default function HtmlToPdfPage() {
 
     try {
       setProgress(10);
-      const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
+      const [{ jsPDF }, html2canvas] = await Promise.all([
+        import("jspdf"),
+        import("html2canvas-pro"),
+      ]);
 
       const pageSizes: Record<string, [number, number]> = {
-        a4: [595.28, 841.89],
-        letter: [612, 792],
-        legal: [612, 1008],
+        a4: [210, 297],
+        letter: [215.9, 279.4],
+        legal: [215.9, 355.6],
       };
 
-      let [w, h] = pageSizes[pageSize];
-      if (orientation === "landscape") [w, h] = [h, w];
+      const [pw, ph] = pageSizes[pageSize];
+      const isLandscape = orientation === "landscape";
+      const pdfW = isLandscape ? ph : pw;
+      const pdfH = isLandscape ? pw : ph;
 
-      setProgress(30);
-      const pdf = await PDFDocument.create();
-      const font = await pdf.embedFont(StandardFonts.Helvetica);
-      const lines = htmlContent.split("\n");
+      setProgress(20);
+      const container = document.createElement("div");
+      container.style.cssText = `position:fixed;left:-9999px;top:0;width:${pdfW}mm;background:#fff;padding:10mm;font-family:Helvetica,Arial,sans-serif;font-size:12pt;line-height:1.5;color:#000;`;
+      container.innerHTML = htmlContent;
+      document.body.appendChild(container);
 
-      const fontSize = 12;
-      const lineHeight = fontSize * 1.5;
-      const margin = 50;
+      setProgress(40);
+      const canvas = await html2canvas.default(container, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+      document.body.removeChild(container);
 
-      let currentPage = pdf.addPage([w, h]);
-      let y = h - margin;
+      setProgress(70);
+      const imgData = canvas.toDataURL("image/png");
+      const imgW = canvas.width;
+      const imgH = canvas.height;
+      const ratio = Math.min(pdfW / imgW, pdfH / imgH);
+      const scaledW = imgW * ratio;
+      const scaledH = imgH * ratio;
 
-      setProgress(50);
+      const pdf = new jsPDF({
+        orientation: isLandscape ? "landscape" : "portrait",
+        unit: "mm",
+        format: pageSize,
+      });
 
-      for (const line of lines) {
-        if (y < margin) {
-          currentPage = pdf.addPage([w, h]);
-          y = h - margin;
-        }
-        const maxChars = Math.floor((w - 2 * margin) / (fontSize * 0.5));
-        const wrapped =
-          line.length > maxChars
-            ? [line.slice(0, maxChars), line.slice(maxChars)]
-            : [line];
-        for (const wl of wrapped) {
-          if (y < margin) {
-            currentPage = pdf.addPage([w, h]);
-            y = h - margin;
-          }
-          currentPage.drawText(wl || " ", {
-            x: margin,
-            y,
-            font,
-            size: fontSize,
-            color: rgb(0, 0, 0),
-          });
-          y -= lineHeight;
-        }
+      setProgress(85);
+      let yOffset = 0;
+      const pageContentH = pdfH;
+
+      while (yOffset < scaledH) {
+        if (yOffset > 0) pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, -yOffset, scaledW, scaledH);
+        yOffset += pageContentH;
       }
 
-      setProgress(80);
-      const bytes = await pdf.save();
       setProgress(100);
-
-      const blob = new Blob([new Uint8Array(bytes)], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "output.pdf";
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 100);
+      pdf.save("output.pdf");
     } catch {
       setError(t.htmlToPdfFailed);
     } finally {
