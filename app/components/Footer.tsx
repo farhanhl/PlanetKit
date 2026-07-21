@@ -19,12 +19,12 @@ export default function Footer() {
         <p className="text-xs text-text-secondary">
           {t.developedBy}{" "}
           <a
-            href="https://x.com/strr4angerz"
+            href="https://www.farhanhl.dev/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-accent transition-colors hover:text-accent-hover"
           >
-            Sin
+            Farhan Hadi Lutfi
           </a>
         </p>
       </div>
