@@ -697,6 +697,14 @@ const toolDefs = [
     anim: 'anim-type-cursor',
   },
   {
+    href: '/tools/php-playground',
+    icon: FileCode,
+    category: 'Utilities' as Tab,
+    titleKey: 'phpPlaygroundCard.title',
+    descKey: 'phpPlaygroundCard.desc',
+    anim: 'anim-type-cursor',
+  },
+  {
     href: '/tools/image-metadata-remover',
     icon: FileSearch,
     category: 'Enhance' as Tab,

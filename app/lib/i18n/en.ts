@@ -1169,6 +1169,14 @@ const en = {
   pythonPlaygroundPlaceholder: "Write Python here...",
   pythonPlaygroundNote: "First run loads Pyodide (~6MB) from CDN. Subsequent runs are instant.",
 
+  // PHP Playground
+  phpPlaygroundCard: { title: "PHP Playground", desc: "Run PHP code in the browser with WASM." },
+  phpPlaygroundTitle: "PHP Playground",
+  phpPlaygroundDesc: "Write and run PHP code directly in your browser. Powered by php-wasm.",
+  phpPlaygroundLoading: "Loading PHP...",
+  phpPlaygroundPlaceholder: "<?php\n\n// Write PHP here...\n",
+  phpPlaygroundNote: "First run loads PHP WASM from CDN. Subsequent runs are instant.",
+
   // SQL Playground
   sqlPlaygroundCard: { title: "SQL Playground", desc: "Run SQL queries with a sample SQLite database." },
   sqlPlaygroundTitle: "SQL Playground",

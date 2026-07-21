@@ -1171,6 +1171,14 @@ const id: Translations = {
   pythonPlaygroundPlaceholder: "Tulis Python di sini...",
   pythonPlaygroundNote: "Run pertama memuat Pyodide (~6MB) dari CDN. Run berikutnya instan.",
 
+  // PHP Playground
+  phpPlaygroundCard: { title: "PHP Playground", desc: "Jalankan kode PHP di browser dengan WASM." },
+  phpPlaygroundTitle: "PHP Playground",
+  phpPlaygroundDesc: "Tulis dan jalankan kode PHP langsung di browser Anda. Didukung oleh php-wasm.",
+  phpPlaygroundLoading: "Memuat PHP...",
+  phpPlaygroundPlaceholder: "<?php\n\n// Tulis PHP di sini...\n",
+  phpPlaygroundNote: "Run pertama memuat PHP WASM dari CDN. Run berikutnya instan.",
+
   // SQL Playground
   sqlPlaygroundCard: { title: "SQL Playground", desc: "Jalankan query SQL dengan database SQLite sample." },
   sqlPlaygroundTitle: "SQL Playground",
