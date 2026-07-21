@@ -1,0 +1,267 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-text-secondary: var(--text-secondary);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+}
+
+:root {
+  --background: #0B1120;
+  --foreground: #E8ECF4;
+  --surface: #131C31;
+  --surface-hover: #1A2540;
+  --border: #1E2D4A;
+  --accent: #D4A853;
+  --accent-hover: #E4BC6A;
+  --success: #34D399;
+  --error: #F87171;
+  --text-secondary: #7B8BA5;
+  --parallax-opacity-multiplier: 1;
+  --vignette-color: rgba(11,17,32,0.55);
+  --parallax-filter: none;
+}
+
+html[data-theme="light"] {
+  --background: #F8F9FC;
+  --foreground: #1A1D2E;
+  --surface: #FFFFFF;
+  --surface-hover: #F0F2F7;
+  --border: #D5DAE4;
+  --accent: #B8860B;
+  --accent-hover: #D4A853;
+  --success: #10B981;
+  --error: #EF4444;
+  --text-secondary: #6B7280;
+  --parallax-opacity-multiplier: 5;
+  --vignette-color: rgba(248,249,252,0.85);
+  --parallax-filter: brightness(0.6) saturate(1.5) contrast(1.2);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ============================================
+   SCROLL REVEAL
+   ============================================ */
+.tool-card-hidden {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* ============================================
+   ICON ANIMATION KEYFRAMES
+   ============================================ */
+@keyframes icon-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes icon-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes icon-shrink {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(0.62); }
+}
+@keyframes icon-bounce-ud {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-6px); }
+}
+@keyframes icon-bounce-down {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(6px); }
+}
+@keyframes icon-slide-up {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-7px); }
+}
+@keyframes icon-slide-down {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(7px); }
+}
+@keyframes icon-type-cursor {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.15; }
+}
+@keyframes icon-hue {
+  from { filter: hue-rotate(0deg) brightness(1.1); }
+  to   { filter: hue-rotate(360deg) brightness(1.1); }
+}
+@keyframes icon-drip {
+  0%   { transform: translateY(0) scaleY(1); }
+  40%  { transform: translateY(5px) scaleY(0.88); }
+  70%  { transform: translateY(8px) scaleY(0.78); }
+  100% { transform: translateY(0) scaleY(1); }
+}
+@keyframes icon-erase {
+  0%,100% { transform: translateX(0) rotate(-8deg); }
+  25%     { transform: translateX(-6px) rotate(-8deg); }
+  75%     { transform: translateX(6px) rotate(-8deg); }
+}
+@keyframes icon-write {
+  0%,100% { transform: rotate(-15deg) translateY(0); }
+  50%     { transform: rotate(-15deg) translateY(-5px); }
+}
+@keyframes icon-lock {
+  0%,100% { transform: translateX(0) rotate(0); }
+  20%     { transform: translateX(-3px) rotate(-6deg); }
+  40%     { transform: translateX(3px) rotate(6deg); }
+  60%     { transform: translateX(-2px) rotate(-3deg); }
+  80%     { transform: translateX(2px) rotate(3deg); }
+}
+@keyframes icon-sparkle {
+  0%,100% { transform: scale(1) rotate(0deg); }
+  50%     { transform: scale(1.28) rotate(22deg); }
+}
+@keyframes icon-glitch {
+  0%,100% { transform: translateX(0) skewX(0deg); }
+  20%     { transform: translateX(-3px) skewX(3deg); }
+  40%     { transform: translateX(3px) skewX(-3deg); }
+  60%     { transform: translateX(-1px) skewX(1deg); }
+  80%     { transform: translateX(2px) skewX(-1deg); }
+}
+@keyframes icon-pulse-ring {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.22); }
+}
+@keyframes icon-wrench {
+  0%,100% { transform: rotate(0deg); }
+  30%     { transform: rotate(-22deg); }
+  70%     { transform: rotate(22deg); }
+}
+@keyframes icon-tick {
+  0%   { transform: rotate(0deg); }
+  80%  { transform: rotate(360deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes icon-stretch {
+  0%,100% { transform: scaleX(1); }
+  50%     { transform: scaleX(1.3); }
+}
+@keyframes icon-paint {
+  0%,100% { transform: rotate(-5deg) translateX(0); }
+  50%     { transform: rotate(12deg) translateX(4px); }
+}
+@keyframes icon-scale {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.25); }
+}
+@keyframes icon-scissor {
+  0%,100% { transform: rotate(0deg); }
+  50%     { transform: rotate(-28deg); }
+}
+@keyframes icon-stack {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-6px); }
+}
+@keyframes icon-flatten {
+  0%,100% { transform: scaleY(1); }
+  50%     { transform: scaleY(0.55); }
+}
+@keyframes icon-crop {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(0.75); }
+}
+@keyframes icon-share {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%     { transform: scale(1.22); opacity: 0.8; }
+}
+@keyframes icon-shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-4px); }
+  40%     { transform: translateX(4px); }
+  60%     { transform: translateX(-2px); }
+  80%     { transform: translateX(2px); }
+}
+@keyframes icon-blink {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.1; }
+}
+@keyframes icon-shield {
+  0%,100% { transform: scale(1); filter: drop-shadow(0 0 0px currentColor); }
+  50%     { transform: scale(1.18); filter: drop-shadow(0 0 6px currentColor); }
+}
+@keyframes icon-compare {
+  0%,100% { transform: translateX(0); }
+  33%     { transform: translateX(-5px); }
+  66%     { transform: translateX(5px); }
+}
+@keyframes icon-grid {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0.25; }
+}
+@keyframes icon-slide-tr {
+  0%,100% { transform: translateX(0); }
+  50%     { transform: translateX(-6px); }
+}
+@keyframes icon-scan {
+  0%,100% { transform: translateY(-5px); }
+  50%     { transform: translateY(5px); }
+}
+
+/* ============================================
+   ICON ANIMATION TRIGGER CLASSES
+   (play on parent .group hover)
+   ============================================ */
+.group:hover .anim-spin        { animation: icon-spin 0.65s ease-in-out; }
+.group:hover .anim-spin-slow   { animation: icon-spin-slow 1.4s linear; }
+.group:hover .anim-shrink      { animation: icon-shrink 0.55s ease-in-out; }
+.group:hover .anim-bounce-ud   { animation: icon-bounce-ud 0.5s ease-in-out; }
+.group:hover .anim-bounce-down { animation: icon-bounce-down 0.5s ease-in-out; }
+.group:hover .anim-slide-up    { animation: icon-slide-up 0.5s ease-in-out; }
+.group:hover .anim-slide-down  { animation: icon-slide-down 0.5s ease-in-out; }
+.group:hover .anim-type-cursor { animation: icon-type-cursor 0.7s ease-in-out 2; }
+.group:hover .anim-hue         { animation: icon-hue 0.8s linear; }
+.group:hover .anim-drip        { animation: icon-drip 0.65s ease-in-out; }
+.group:hover .anim-erase       { animation: icon-erase 0.6s ease-in-out; }
+.group:hover .anim-write       { animation: icon-write 0.5s ease-in-out 2; }
+.group:hover .anim-lock        { animation: icon-lock 0.6s ease-in-out; }
+.group:hover .anim-sparkle     { animation: icon-sparkle 0.55s ease-in-out 2; }
+.group:hover .anim-glitch      { animation: icon-glitch 0.5s ease-in-out; }
+.group:hover .anim-pulse-ring  { animation: icon-pulse-ring 0.5s ease-in-out 2; }
+.group:hover .anim-wrench      { animation: icon-wrench 0.6s ease-in-out; }
+.group:hover .anim-tick        { animation: icon-tick 0.8s ease-in-out; }
+.group:hover .anim-stretch     { animation: icon-stretch 0.5s ease-in-out; }
+.group:hover .anim-paint       { animation: icon-paint 0.5s ease-in-out 2; }
+.group:hover .anim-scale       { animation: icon-scale 0.5s ease-in-out; }
+.group:hover .anim-scissor     { animation: icon-scissor 0.55s ease-in-out 2; }
+.group:hover .anim-stack       { animation: icon-stack 0.5s ease-in-out 2; }
+.group:hover .anim-flatten     { animation: icon-flatten 0.5s ease-in-out; }
+.group:hover .anim-crop        { animation: icon-crop 0.5s ease-in-out; }
+.group:hover .anim-share       { animation: icon-share 0.5s ease-in-out; }
+.group:hover .anim-shake       { animation: icon-shake 0.5s ease-in-out; }
+.group:hover .anim-blink       { animation: icon-blink 0.6s ease-in-out 2; }
+.group:hover .anim-shield      { animation: icon-shield 0.55s ease-in-out 2; }
+.group:hover .anim-compare     { animation: icon-compare 0.6s ease-in-out; }
+.group:hover .anim-grid        { animation: icon-grid 0.5s ease-in-out 2; }
+.group:hover .anim-slide-tr    { animation: icon-slide-tr 0.5s ease-in-out; }
+.group:hover .anim-scan        { animation: icon-scan 0.6s ease-in-out 2; }
