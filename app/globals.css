@@ -1,5 +1,106 @@
 @import "tailwindcss";
 
+/* Load light as base (later import wins in cascade) */
+@import "github-markdown-css/github-markdown-dark-dimmed.css";
+@import "github-markdown-css/github-markdown-light.css";
+
+/* Tailwind preflight resets list-style and img display inside markdown-body.
+   Restore them so bullet dots show and inline badges sit side-by-side. */
+.markdown-body ul {
+  list-style-type: disc;
+}
+.markdown-body ol {
+  list-style-type: decimal;
+}
+.markdown-body img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Dark mode overrides — higher specificity via [data-theme="dark"] */
+[data-theme="dark"] .markdown-body {
+  color: #f0f6fc;
+}
+[data-theme="dark"] .markdown-body h1,
+[data-theme="dark"] .markdown-body h2,
+[data-theme="dark"] .markdown-body h3,
+[data-theme="dark"] .markdown-body h4,
+[data-theme="dark"] .markdown-body h5,
+[data-theme="dark"] .markdown-body h6 {
+  color: #f0f6fc;
+}
+[data-theme="dark"] .markdown-body a {
+  color: #478be6;
+}
+[data-theme="dark"] .markdown-body code {
+  background-color: rgba(110,118,129,.4);
+  color: #f0f6fc;
+}
+[data-theme="dark"] .markdown-body pre {
+  background-color: #161b22;
+}
+[data-theme="dark"] .markdown-body pre code {
+  background-color: transparent;
+  color: #f0f6fc;
+}
+[data-theme="dark"] .markdown-body blockquote {
+  color: #8b949e;
+  border-left-color: #3d444d;
+}
+[data-theme="dark"] .markdown-body hr {
+  background-color: #3d444d;
+  border-color: #3d444d;
+}
+[data-theme="dark"] .markdown-body table tr {
+  background-color: #0d1117;
+  border-color: #3d444d;
+}
+[data-theme="dark"] .markdown-body table th {
+  background-color: #161b22;
+  color: #f0f6fc;
+  border-color: #3d444d;
+}
+[data-theme="dark"] .markdown-body table td {
+  border-color: #3d444d;
+}
+[data-theme="dark"] .markdown-body table thead th {
+  border-bottom-color: #3d444d;
+}
+[data-theme="dark"] .markdown-body strong {
+  color: #f0f6fc;
+}
+[data-theme="dark"] .markdown-body .highlight {
+  background-color: #161b22;
+}
+[data-theme="dark"] .markdown-body .highlight pre {
+  background-color: transparent;
+}
+[data-theme="dark"] .markdown-body del {
+  color: #8b949e;
+}
+[data-theme="dark"] .markdown-body .pl-c {
+  color: #8b949e;
+}
+[data-theme="dark"] .markdown-body .pl-s .pl-s1 {
+  color: #a5d6ff;
+}
+[data-theme="dark"] .markdown-body .pl-k {
+  color: #ff7b72;
+}
+[data-theme="dark"] .markdown-body .pl-en {
+  color: #d2a8ff;
+}
+[data-theme="dark"] .markdown-body .pl-smi {
+  color: #c9d1d9;
+}
+[data-theme="dark"] .markdown-body .pl-e {
+  color: #d2a8ff;
+}
+[data-theme="dark"] .markdown-body .pl-pdc {
+  color: #8b949e;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

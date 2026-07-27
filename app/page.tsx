@@ -62,6 +62,7 @@ import {
   Share2,
   FileSearch,
   X,
+  GitBranch,
 } from 'lucide-react';
 import ToolCard from './components/ToolCard';
 import ParallaxBackground from './components/ParallaxBackground';
@@ -743,6 +744,14 @@ const toolDefs = [
     titleKey: 'asciiCard.title',
     descKey: 'asciiCard.desc',
     anim: 'anim-glitch',
+  },
+  {
+    href: '/tools/github-readme',
+    icon: GitBranch,
+    category: 'Utilities' as Tab,
+    titleKey: 'githubReadmeCard.title',
+    descKey: 'githubReadmeCard.desc',
+    anim: 'anim-type-cursor',
   },
 ];
 
