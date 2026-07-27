@@ -7,7 +7,7 @@ import { useLang } from "@/app/lib/i18n/context";
 import ToolPageLayout from "@/app/components/ToolPageLayout";
 import ToolSeo from "@/app/components/ToolSeo";
 
-const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
+const md = new MarkdownIt({ html: true, linkify: true, typographer: true, breaks: true });
 
 const sampleMd = `# Heading 1
 
@@ -77,7 +77,8 @@ export default function MarkdownPreviewPage() {
               </button>
             </div>
             <div
-              className="prose prose-sm h-[500px] overflow-y-auto rounded-xl border border-border bg-surface p-4 text-foreground dark:prose-invert prose-headings:font-bold prose-a:text-accent prose-code:text-accent prose-pre:bg-background"
+              className="markdown-body h-[500px] overflow-y-auto rounded-xl border border-border p-4"
+              style={{ backgroundColor: "var(--background)" }}
               dangerouslySetInnerHTML={{ __html: html }}
             />
           </div>
