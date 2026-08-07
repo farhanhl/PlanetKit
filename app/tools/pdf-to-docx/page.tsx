@@ -123,6 +123,149 @@ export function rowToText(row: GridRow): string {
   return line;
 }
 
+/**
+ * Sanitizes OCR output line to remove logo fragments, random noise,
+ * and normalize form field dotted lines (e.g. Nama : .......).
+ *
+ * Strategy:
+ *  1. Strip known garbage patterns (logo artifacts, page separators, pure symbols)
+ *  2. Exempt known-good patterns from ratio filter (Jakarta date lines, etc.)
+ *  3. Apply alpha-ratio noise filter
+ *  4. Match known form field labels → normalize to "Label : ........"
+ *  5. Normalize remaining Jakarta date lines
+ *  6. Drop residual junk (1-2 char noise)
+ */
+export function cleanOcrTextLine(rawLine: string): string {
+  if (!rawLine) return "";
+  let line = rawLine.trim();
+  if (!line) return "";
+
+  // ── Step 1: Hard-coded garbage patterns ──────────────────────────────────
+  // Logo artifacts: "um, | Aam", "ica | am", "ia, | Aam", "Aa, Palang KOTA"
+  if (/^[a-z]{1,5}[,.\s]*[|/]\s*[A-Z][a-z]{1,5}$/i.test(line)) return "";
+  if (/Palang\s*KOTA/i.test(line)) return "";
+  // PMI Palang Merah logo text fragments ("Pp) Merah | | JAKARTA", etc.)
+  if (/Merah\s*[|/]\s*[|/]?\s*JAKARTA/i.test(line)) return "";
+  if (/^(PMI|Palang|Merah|Indonesia)\s*(KOTA|UTARA|SELATAN|BARAT|TIMUR|DKI)?/i.test(line) &&
+    line.length < 30 && !/[.,]/.test(line)) return "";
+  // Page separator injected by tesseract reading scanned page headers
+  if (/^---\s*Halaman\s*\d+\s*---$/i.test(line)) return "";
+  // Lone separator characters
+  if (/^[|\-/\\.]{1,5}$/.test(line)) return "";
+
+  // ── Step 2: Exempt known-good line patterns from noise filter ─────────────
+  // Jakarta date lines (contain "Jakarta," + year) — exempt before ratio check
+  const isJakartaLine = /Jakarta[,.]?\s*/i.test(line) && /\d{4}/.test(line);
+  // Lines starting with a number+period (numbered list items like "1. Bersedia...")
+  const isNumberedList = /^\d+\.\s+[A-Z]/.test(line);
+  // Parenthesized notes: "(tanda tangan)", "(Nama Jelas)"
+  const isParenNote = /^\([^)]{3,30}\)$/.test(line);
+  // Short all-caps section headers like "A.", "B.", "G."
+  const isSectionHeader = /^[A-Z]\.\s*[A-Z\s]{3,}$/.test(line);
+
+  // ── Step 3: Alpha-ratio noise filter (skip for exempted patterns) ─────────
+  if (!isJakartaLine && !isNumberedList && !isParenNote && !isSectionHeader) {
+    const alphaNum = line.replace(/[^a-zA-Z0-9]/g, "").length;
+    const ratio = line.length > 0 ? alphaNum / line.length : 1;
+    if (line.length > 5 && ratio < 0.3) return "";
+    // Very short garbage lines (≤3 chars with non-alphanumeric)
+    if (line.length <= 3 && !/^[A-Z0-9]{1,3}$/i.test(line)) return "";
+  }
+
+  // ── Step 4: Known form field label matching ───────────────────────────────
+  const formLabels = [
+    // SURAT PERNYATAAN fields
+    { regex: /^Nama\s*Lengkap/i, label: "Nama Lengkap" },
+    { regex: /^Nama\s*Panggilan/i, label: "Nama Panggilan" },
+    { regex: /^Nama\s*Ayah/i, label: "Nama Ayah" },
+    { regex: /^Nama\s*Ibu/i, label: "Nama Ibu" },
+    { regex: /^Nama\s*Peserta/i, label: "Nama Peserta" },
+    { regex: /^Nama\s*Pembina/i, label: "Nama Pembina" },
+    { regex: /^Nama/i, label: "Nama" },
+    { regex: /^Tempat\s*[,/]\s*Tgl\s*Lahir/i, label: "Tempat, Tgl Lahir" },
+    { regex: /^Tanggal\s*Lahir/i, label: "Tanggal Lahir" },
+    { regex: /^Jenis\s*Kelamin/i, label: "Jenis Kelamin" },
+    { regex: /^Agama/i, label: "Agama" },
+    { regex: /^Alamat\s*Lengkap/i, label: "Alamat Lengkap" },
+    { regex: /^Alamat\s*Sekolah/i, label: "Alamat Sekolah" },
+    { regex: /^Alamat/i, label: "Alamat" },
+    { regex: /^No[.\s]*[HW][PA][/\s]*(WA|HP)?/i, label: "No. HP/WA" },
+    { regex: /^NIP\s*[/\s]*NIS/i, label: "NIP / NIS" },
+    { regex: /^Email/i, label: "Email" },
+    // Sekolah variants (order matters: more specific first)
+    { regex: /^Nama\s*Sekolah/i, label: "Nama Sekolah" },
+    { regex: /^Sekolah\s*\/\s*PMR/i, label: "Sekolah/PMR" },
+    { regex: /^Asal\s*Sekolah/i, label: "Asal Sekolah" },
+    { regex: /^Sekolah/i, label: "Sekolah" },
+    { regex: /^Kelas/i, label: "Kelas" },
+    { regex: /^Jurusan/i, label: "Jurusan (jika ada)" },
+    // PMR fields
+    { regex: /^Tingkat\s*PMR/i, label: "Tingkat PMR" },
+    { regex: /^Tahun\s*Bergabung/i, label: "Tahun Bergabung" },
+    { regex: /^Jabatan\s*di\s*PMR/i, label: "Jabatan di PMR" },
+    { regex: /^Jabatan/i, label: "Jabatan" },
+    { regex: /^Pengalaman\s*Kegiatan/i, label: "Pengalaman Kegiatan PMR" },
+    { regex: /^Prestasi/i, label: "Prestasi (jika ada)" },
+    // Kemampuan / Keterampilan
+    { regex: /^Kemampuan\s*Bahasa/i, label: "Kemampuan Bahasa Asing" },
+    { regex: /^Kemampuan\s*Komunikasi/i, label: "Kemampuan Komunikasi" },
+    { regex: /^Keterampilan\s*Seni/i, label: "Keterampilan Seni Budaya" },
+    { regex: /^Pemahaman\s*tentang/i, label: "Pemahaman tentang PMI" },
+    // Paspor
+    { regex: /^Nomor\s*Paspor/i, label: "Nomor Paspor" },
+    { regex: /^Tanggal\s*Terbit/i, label: "Tanggal Terbit" },
+    { regex: /^Tanggal\s*Berlaku/i, label: "Tanggal Berlaku" },
+    // Orang Tua / REKOMENDASI
+    { regex: /^Pekerjaan/i, label: "Pekerjaan" },
+    // standalone No. HP fallback
+    { regex: /^No\.\s*HP/i, label: "No. HP" },
+  ];
+
+  for (const item of formLabels) {
+    if (item.regex.test(line)) {
+      const colonIdx = line.indexOf(":");
+      if (colonIdx !== -1) {
+        const val = line.substring(colonIdx + 1).trim();
+        // Keep value if it's meaningful (e.g. "Madya / Wira" for Tingkat PMR)
+        const valueIsSignificant =
+          val.length >= 3 &&
+          val.length <= 60 &&
+          /[a-zA-Z]/.test(val) &&
+          !/^[.\s,_\-]+$/.test(val);
+        if (valueIsSignificant) {
+          return `${item.label} : ${val}`;
+        }
+      }
+      return `${item.label} : ............................................................................................`;
+    }
+  }
+
+  line = line.replace(/Jakarta,\s*[\.\s\w\:\;]+(\d{4})/gi, "Jakarta, .................................... $1");
+
+  if (/^[^\w\s]{1,3}$/.test(line) || /^[a-z]{1,2}$/i.test(line)) {
+    return "";
+  }
+
+  return line;
+}
+
+/**
+ * Determine if a native PDF row is centered on the page.
+ * pageWidth is the viewport width in PDF units.
+ */
+export function isRowCentered(
+  row: { tokens: { x: number; width: number }[] },
+  pageWidth: number
+): boolean {
+  if (row.tokens.length === 0) return false;
+  const leftX = row.tokens[0].x;
+  const last = row.tokens[row.tokens.length - 1];
+  const rightX = last.x + last.width;
+  const centerX = (leftX + rightX) / 2;
+  const pageCenterX = pageWidth / 2;
+  return Math.abs(centerX - pageCenterX) < pageWidth * 0.12;
+}
+
 // ────────────────────────────────────────────────────────────
 // Component
 // ────────────────────────────────────────────────────────────
@@ -175,11 +318,13 @@ export default function PdfToDocxPage() {
         Packer,
         Paragraph,
         TextRun,
+        AlignmentType,
         Table,
         TableRow,
         TableCell,
         WidthType,
         BorderStyle,
+        ImageRun,
       } = await import("docx");
 
       const buffer = await file.arrayBuffer();
@@ -191,20 +336,16 @@ export default function PdfToDocxPage() {
       for (let i = 1; i <= pdf.numPages; i++) {
         setProgress((i / pdf.numPages) * 85);
 
-        // Page separator header
-        children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: t.pageHeader(i),
-                bold: true,
-                size: 20,
-                color: "888888",
-              }),
-            ],
-            spacing: { before: 200, after: 100 },
-          })
-        );
+        // Insert a page break before each page (except the first)
+        if (i > 1) {
+          children.push(
+            new Paragraph({
+              pageBreakBefore: true,
+              children: [],
+              spacing: { before: 0, after: 0 },
+            })
+          );
+        }
 
         // Extract text items with positional data
         const page = await pdf.getPage(i);
@@ -224,12 +365,119 @@ export default function PdfToDocxPage() {
         }
 
         if (tokens.length === 0) {
-          children.push(
-            new Paragraph({ children: [new TextRun({ text: "", size: 24 })], spacing: { after: 80 } })
-          );
+          // Scanned page — render to canvas and OCR
+          try {
+            const renderScale = 2;
+            const renderViewport = page.getViewport({ scale: renderScale });
+            const canvas = document.createElement("canvas");
+            canvas.width = renderViewport.width;
+            canvas.height = renderViewport.height;
+            const ctx = canvas.getContext("2d");
+
+            if (ctx) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              await (page.render as any)({ canvasContext: ctx, viewport: renderViewport, canvas }).promise;
+
+              // Single Tesseract recognize call — use result.data for text + line bboxes
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              let ocrData: any = null;
+              try {
+                const Tesseract = await import("tesseract.js");
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const tObj: any = Tesseract.default || Tesseract;
+                const blob = await new Promise<Blob>((resolve) =>
+                  canvas.toBlob((b) => resolve(b!), "image/png")
+                );
+                const result = await tObj.recognize(blob, "ind+eng", {
+                  logger: (m: { status: string; progress: number }) => {
+                    if (m.status === "recognizing text") {
+                      const pageProgress = ((i - 1) / pdf.numPages) * 85;
+                      setProgress(pageProgress + (m.progress * 85) / pdf.numPages);
+                    }
+                  },
+                });
+                ocrData = result.data;
+              } catch (ocrErr) {
+                console.warn("Tesseract OCR failed, falling back to image embedding:", ocrErr);
+              }
+
+              // Build per-line data from Tesseract — prefer line bboxes if available
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              type OcrLineEntry = { text: string; bbox: { x0: number; y0: number; x1: number; y1: number } };
+              const ocrLineData: OcrLineEntry[] =
+                (ocrData?.lines ?? []).length > 0
+                  ? ocrData.lines
+                  : (ocrData?.text ?? "")
+                    .split("\n")
+                    .map((t: string, idx: number) => ({
+                      text: t,
+                      bbox: { x0: 72, y0: idx * 30, x1: renderViewport.width - 72, y1: idx * 30 + 28 },
+                    }));
+
+              const ocrPageWidth = renderViewport.width;
+              const validOcrLines = ocrLineData.filter((l) => cleanOcrTextLine(l.text));
+
+              if (validOcrLines.length > 0) {
+                // Reconstruct layout using bounding boxes from Tesseract
+                for (const ocrLine of validOcrLines) {
+                  const cleaned = cleanOcrTextLine(ocrLine.text);
+                  if (!cleaned) continue;
+                  const lineWidth = ocrLine.bbox.x1 - ocrLine.bbox.x0;
+                  const fakeRow = {
+                    y: ocrLine.bbox.y0,
+                    tokens: [{ str: cleaned, x: ocrLine.bbox.x0, y: ocrLine.bbox.y0, width: lineWidth }],
+                  };
+                  const centered = isRowCentered(fakeRow, ocrPageWidth);
+                  const isAllCaps = /^[A-Z][A-Z\s\-\/]{7,}$/.test(cleaned);
+                  children.push(
+                    new Paragraph({
+                      alignment: centered ? AlignmentType.CENTER : AlignmentType.LEFT,
+                      children: [
+                        new TextRun({
+                          text: cleaned,
+                          size: 22,
+                          bold: isAllCaps && centered,
+                        }),
+                      ],
+                      spacing: { after: 80 },
+                    })
+                  );
+                }
+              } else {
+                // Fallback to ImageRun if no text recognized
+                const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+                const base64Data = dataUrl.split(",")[1];
+                const binaryString = window.atob(base64Data);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let b = 0; b < binaryString.length; b++) {
+                  bytes[b] = binaryString.charCodeAt(b);
+                }
+                const targetWidth = 550;
+                const targetHeight = Math.round(targetWidth * (viewport.height / viewport.width));
+                children.push(
+                  new Paragraph({
+                    children: [
+                      new ImageRun({
+                        data: bytes,
+                        transformation: { width: targetWidth, height: targetHeight },
+                        type: "jpg",
+                      }),
+                    ],
+                    spacing: { after: 160 },
+                  })
+                );
+              }
+            } else {
+              children.push(new Paragraph({ children: [new TextRun({ text: "", size: 22 })], spacing: { after: 80 } }));
+            }
+          } catch (renderError) {
+            console.error("Failed to render PDF page canvas:", renderError);
+            children.push(new Paragraph({ children: [new TextRun({ text: "", size: 22 })], spacing: { after: 80 } }));
+          }
           continue;
         }
 
+        // Native text PDF path
         const rows = groupByRow(tokens);
         const pageWidth = viewport.width;
 
@@ -283,22 +531,32 @@ export default function PdfToDocxPage() {
             children.push(new Paragraph({ children: [], spacing: { after: 160 } }));
             idx = tableEnd + 1;
           } else {
-            // Plain paragraph
+            // Plain paragraph — detect alignment from row X position
             const line = rowToText(rows[idx]);
             if (line) {
+              const centered = isRowCentered(rows[idx], pageWidth);
+              const isAllCaps = /^[A-Z][A-Z\s\-\/]{7,}$/.test(line);
               children.push(
                 new Paragraph({
-                  children: [new TextRun({ text: line, size: 24 })],
+                  alignment: centered ? AlignmentType.CENTER : AlignmentType.LEFT,
+                  children: [
+                    new TextRun({
+                      text: line,
+                      size: 22,
+                      bold: isAllCaps && centered,
+                    }),
+                  ],
                   spacing: { after: 80 },
                 })
               );
             }
             idx++;
           }
-        }
-      }
+        } // end while rows
+      } // end for pages
 
       setProgress(92);
+
 
       const doc = new Document({ sections: [{ children }] });
       const blob = await Packer.toBlob(doc);

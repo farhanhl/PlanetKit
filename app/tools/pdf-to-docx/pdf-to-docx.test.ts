@@ -4,6 +4,7 @@ import {
   detectTableColumns,
   assignToColumns,
   rowToText,
+  cleanOcrTextLine,
 } from "./page";
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
@@ -200,3 +201,38 @@ describe("pdf-to-docx docx library", () => {
     expect(blob.size).toBeGreaterThan(0);
   });
 });
+
+// ─── cleanOcrTextLine ─────────────────────────────────────────────────────────
+
+describe("cleanOcrTextLine", () => {
+  it("normalizes form field labels with dotted underline lines", () => {
+    expect(cleanOcrTextLine("Nama NE OE SR")).toBe(
+      "Nama : ............................................................................................"
+    );
+    expect(cleanOcrTextLine("Tempat/Tgl Lahir 3! ior snbaachien oda Anid AASB EIA")).toBe(
+      "Tempat, Tgl Lahir : ............................................................................................"
+    );
+    expect(cleanOcrTextLine("Sekolah REA")).toBe(
+      "Sekolah : ............................................................................................"
+    );
+  });
+
+  it("filters out garbage header logo fragments", () => {
+    expect(cleanOcrTextLine("Palang KOTA")).toBe("");
+    expect(cleanOcrTextLine("Pp) Merah | | JAKARTA")).toBe("");
+    expect(cleanOcrTextLine("Indonesia UTARA")).toBe("");
+  });
+
+  it("normalizes city date lines", () => {
+    expect(cleanOcrTextLine("Jakarta, ..........i...... 2026")).toBe(
+      "Jakarta, .................................... 2026"
+    );
+  });
+
+  it("preserves standard body paragraphs", () => {
+    const paragraph =
+      "1. Bersedia mengikuti seluruh rangkaian proses seleksi International Exchange Program";
+    expect(cleanOcrTextLine(paragraph)).toBe(paragraph);
+  });
+});
+

@@ -24,7 +24,7 @@ describe("merge-pdf", () => {
     const pdf1 = await createTestPdf(2);
     const pdf2 = await createTestPdf(3);
 
-    const result = await mergePdfs([pdf1.buffer, pdf2.buffer]);
+    const result = await mergePdfs([pdf1.buffer as ArrayBuffer, pdf2.buffer as ArrayBuffer]);
     const merged = await PDFDocument.load(result);
 
     expect(merged.getPageCount()).toBe(5);
@@ -32,7 +32,7 @@ describe("merge-pdf", () => {
 
   it("merges single PDF", async () => {
     const pdf = await createTestPdf(4);
-    const result = await mergePdfs([pdf.buffer]);
+    const result = await mergePdfs([pdf.buffer as ArrayBuffer]);
     const merged = await PDFDocument.load(result);
 
     expect(merged.getPageCount()).toBe(4);
@@ -46,7 +46,7 @@ describe("merge-pdf", () => {
 
   it("produces valid PDF bytes", async () => {
     const pdf = await createTestPdf(1);
-    const result = await mergePdfs([pdf.buffer]);
+    const result = await mergePdfs([pdf.buffer as ArrayBuffer]);
 
     expect(result).toBeInstanceOf(Uint8Array);
     expect(result.length).toBeGreaterThan(0);

@@ -1219,6 +1219,7 @@ const en = {
   githubReadmeStep3: "Choose a theme from the right panel",
   githubReadmeStep4: "Copy or download the generated README.md",
   githubReadmeNote: "Data is fetched directly from GitHub's public API. No data is stored.",
+  instaFollowersCard: { title: "Instagram Follower Checker", desc: "Check non-followers, mutuals, and unfollowers offline without login." },
 } as const;
 
 type TranslationValue = string | ((...args: never[]) => string);

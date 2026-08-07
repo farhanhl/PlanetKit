@@ -63,6 +63,7 @@ import {
   FileSearch,
   X,
   GitBranch,
+  UserCheck,
 } from 'lucide-react';
 import ToolCard from './components/ToolCard';
 import ParallaxBackground from './components/ParallaxBackground';
@@ -576,6 +577,14 @@ const toolDefs = [
     titleKey: 'wordCounterCard.title',
     descKey: 'wordCounterCard.desc',
     anim: 'anim-type-cursor',
+  },
+  {
+    href: '/tools/instagram-followers-checker',
+    icon: UserCheck,
+    category: 'Utilities' as Tab,
+    titleKey: 'instaFollowersCard.title',
+    descKey: 'instaFollowersCard.desc',
+    anim: 'anim-pulse-ring',
   },
   {
     href: '/tools/text-diff',

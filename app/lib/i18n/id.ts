@@ -1221,6 +1221,7 @@ const id: Translations = {
   githubReadmeStep3: "Pilih tema dari panel kanan",
   githubReadmeStep4: "Salin atau unduh README.md yang dihasilkan",
   githubReadmeNote: "Data diambil langsung dari API publik GitHub. Tidak ada data yang disimpan.",
+  instaFollowersCard: { title: "Cek Pengikut Instagram", desc: "Cek relasi pengikut Instagram secara offline, aman, dan tanpa login." },
 };
 
 export default id;
