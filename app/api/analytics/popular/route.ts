@@ -1,23 +1,23 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/app/lib/supabase";
+import { db } from "@/app/lib/firebase";
+import { collection, query, getDocs, limit } from "firebase/firestore";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const { data: rows, error } = await supabase
-      .from("tool_usage")
-      .select("tool_slug")
-      .limit(1000);
-
-    if (error) {
-      return NextResponse.json({ popular: [] });
-    }
+    const toolUsageRef = collection(db, "tool_usage");
+    const popularQuery = query(toolUsageRef, limit(1000));
+    const snapshot = await getDocs(popularQuery);
 
     const counts = new Map<string, number>();
-    for (const row of rows || []) {
-      counts.set(row.tool_slug, (counts.get(row.tool_slug) || 0) + 1);
-    }
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const slug = data.tool_slug;
+      if (slug && typeof slug === "string") {
+        counts.set(slug, (counts.get(slug) || 0) + 1);
+      }
+    });
 
     const popular = Array.from(counts.entries())
       .map(([slug, count]) => ({ slug, count }))
@@ -25,7 +25,8 @@ export async function GET() {
       .slice(0, 20);
 
     return NextResponse.json({ popular });
-  } catch {
+  } catch (error) {
+    console.error("Fetch popular analytics failed:", error);
     return NextResponse.json({ popular: [] });
   }
 }

@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/app/lib/supabase";
+import { db } from "@/app/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   const password = req.headers.get("x-analytics-password");
@@ -8,29 +11,31 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const { data: rows, error } = await supabase
-      .from("tool_usage")
-      .select("tool_slug, user_ip, created_at");
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    const toolUsageRef = collection(db, "tool_usage");
+    const snapshot = await getDocs(toolUsageRef);
 
     const bySlug = new Map<string, { total: number; uniqueIps: Set<string>; lastUsed: string }>();
-    for (const row of rows || []) {
-      const existing = bySlug.get(row.tool_slug);
+    snapshot.forEach((doc) => {
+      const row = doc.data();
+      const toolSlug = row.tool_slug;
+      const userIp = row.user_ip || "unknown";
+      const createdAt = row.created_at || new Date().toISOString();
+
+      if (!toolSlug || typeof toolSlug !== "string") return;
+
+      const existing = bySlug.get(toolSlug);
       if (existing) {
         existing.total++;
-        existing.uniqueIps.add(row.user_ip);
-        if (row.created_at > existing.lastUsed) existing.lastUsed = row.created_at;
+        existing.uniqueIps.add(userIp);
+        if (createdAt > existing.lastUsed) existing.lastUsed = createdAt;
       } else {
-        bySlug.set(row.tool_slug, {
+        bySlug.set(toolSlug, {
           total: 1,
-          uniqueIps: new Set([row.user_ip]),
-          lastUsed: row.created_at,
+          uniqueIps: new Set([userIp]),
+          lastUsed: createdAt,
         });
       }
-    }
+    });
 
     const stats = Array.from(bySlug.entries())
       .map(([slug, data]) => ({
@@ -44,7 +49,8 @@ export async function GET(req: NextRequest) {
     const totalVisits = stats.reduce((sum, s) => sum + s.totalVisits, 0);
 
     return NextResponse.json({ stats, totalVisits });
-  } catch {
+  } catch (error) {
+    console.error("Fetch analytics stats failed:", error);
     return NextResponse.json({ error: "stats failed" }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/app/lib/supabase";
+import { db } from "@/app/lib/firebase";
+import { collection, query, where, getDocs, addDoc, limit } from "firebase/firestore";
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,34 +9,35 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "slug required" }, { status: 400 });
     }
 
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
     const userAgent = req.headers.get("user-agent") || "unknown";
 
     const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-    const { data: recent } = await supabase
-      .from("tool_usage")
-      .select("id")
-      .eq("tool_slug", slug)
-      .eq("user_ip", ip)
-      .gte("created_at", fiveMinAgo)
-      .limit(1);
+    const toolUsageRef = collection(db, "tool_usage");
 
-    if (recent && recent.length > 0) {
+    const recentQuery = query(
+      toolUsageRef,
+      where("tool_slug", "==", slug),
+      where("user_ip", "==", ip),
+      where("created_at", ">=", fiveMinAgo),
+      limit(1)
+    );
+
+    const snapshot = await getDocs(recentQuery);
+    if (!snapshot.empty) {
       return NextResponse.json({ ok: true, deduped: true });
     }
 
-    const { error } = await supabase.from("tool_usage").insert({
+    await addDoc(toolUsageRef, {
       tool_slug: slug,
       user_ip: ip,
       user_agent: userAgent,
+      created_at: new Date().toISOString(),
     });
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (error) {
+    console.error("Track failed:", error);
     return NextResponse.json({ error: "track failed" }, { status: 500 });
   }
 }
