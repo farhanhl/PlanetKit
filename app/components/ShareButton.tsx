@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useLang } from "@/app/lib/i18n/context";
 
 const SITE_URL = "https://planetkit.vercel.app";
-const SHARE_TEXT = "100% Free All in One Online Tools — convert, merge, split, compress PDFs, generate QR codes & more. All processed in your browser. Nothing leaves your device.";
+const SHARE_TEXT = "Free browser-based tools to convert, merge, split, and edit files without server uploads.";
 
 export default function ShareButton() {
   const { t } = useLang();

@@ -24,11 +24,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "PlanetKit — 100% Free All in One Online Tools",
+    default: "PlanetKit | Free Browser-Based File & Developer Tools",
     template: "%s | PlanetKit",
   },
   description:
-    "100% Free all in one online tools — convert, merge, split, rotate, compress PDFs, extract text, edit metadata, and generate QR codes. All processing happens in your browser. Nothing ever leaves your device.",
+    "Free browser-based tools to convert, merge, split, rotate, and compress PDFs, extract text, edit metadata, and generate QR codes with local processing.",
   keywords: [
     "PDF tools",
     "PDF converter",
@@ -36,25 +36,25 @@ export const metadata: Metadata = {
     "split PDF",
     "compress PDF",
     "QR code generator",
-    "100% free all in one online tools",
+    "browser tools",
     "privacy",
   ],
   icons: {
     icon: "/planetkit.png",
   },
   openGraph: {
-    title: "PlanetKit — 100% Free All in One Online Tools",
+    title: "PlanetKit | Free Browser-Based File & Developer Tools",
     description:
-      "100% Free all in one online tools — convert, merge, split, rotate, compress, and more. All processing happens in your browser.",
+      "Free browser-based tools to convert, merge, split, rotate, and compress files locally in your browser.",
     type: "website",
     siteName: "PlanetKit",
     images: ["/planetkit.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "PlanetKit — 100% Free All in One Online Tools",
+    title: "PlanetKit | Free Browser-Based File & Developer Tools",
     description:
-      "100% Free all in one online tools — convert, merge, split, rotate, compress, and more. All processing happens in your browser.",
+      "Free browser-based tools to convert, merge, split, rotate, and compress files locally in your browser.",
     images: ["/planetkit.png"],
   },
 };
@@ -69,7 +69,7 @@ export default function RootLayout({
     "@type": "WebApplication",
     name: "PlanetKit",
     url: "https://planetkit.vercel.app",
-    description: "100% free all in one online tools for PDF, images, and more — all processed in your browser.",
+    description: "Browser-based developer and file tools for PDF, images, and code with local client-side processing.",
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Any",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },

@@ -1,0 +1,30 @@
+{
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@theme",
+      "description": "Tailwind CSS theme configuration block"
+    },
+    {
+      "name": "@utility",
+      "description": "Tailwind CSS custom utility directive"
+    },
+    {
+      "name": "@custom-variant",
+      "description": "Tailwind CSS custom variant directive"
+    },
+    {
+      "name": "@source",
+      "description": "Tailwind CSS source directive"
+    },
+    {
+      "name": "@plugin",
+      "description": "Tailwind CSS plugin directive"
+    },
+    {
+      "name": "@variant",
+      "description": "Tailwind CSS variant directive"
+    }
+  ]
+}
+

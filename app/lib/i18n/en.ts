@@ -1,8 +1,8 @@
 const en = {
   // Landing
-  heroLine1: "Online tools that respect",
-  heroLine2: "your privacy",
-  heroDesc: "Convert, edit, and optimize files — all processed locally in your browser. Nothing ever leaves your device.",
+  heroLine1: "PlanetKit",
+  heroLine2: "100% in your browser",
+  heroDesc: "Convert, edit, and optimize files locally in your browser without uploading to a server.",
 
   // Tabs
   tabAll: "All",
@@ -78,7 +78,7 @@ const en = {
   backToHome: "Back to Home",
 
   // Footer
-  footerPrivacy: "All processing happens in your browser. Files never leave your device.",
+  footerPrivacy: "Files are processed locally in your browser without server uploads.",
   developedBy: "Developed by",
 
   // Shared errors
@@ -88,7 +88,7 @@ const en = {
 
   // PDF to Image
   pdfToImageTitle: "PDF to Image",
-  pdfToImageDesc: "Convert PDF pages to PNG or JPG images. All processing happens in your browser.",
+  pdfToImageDesc: "Convert PDF pages to PNG or JPG images.",
   pdfToImageDrop: "Drop PDF files here",
   pdfToImageDropDesc: "Supports multiple PDF files",
   outputSettings: "Output Settings",
@@ -104,7 +104,7 @@ const en = {
   imageToPdfTitle: "Image to PDF",
   imageToPdfDesc: "Combine multiple images into a single PDF document.",
   imageToPdfDrop: "Drop images here",
-  imageToPdfDropDesc: "PNG, JPG — drag to reorder",
+  imageToPdfDropDesc: "PNG or JPG files. Drag to reorder.",
   moveLeft: "Move left",
   remove: "Remove",
   moveRight: "Move right",
@@ -129,7 +129,7 @@ const en = {
   extractingText: "Extracting text...",
   extractText: "Extract Text",
   extracting: "Extracting...",
-  noTextFound: "No text found — this may be a scanned document without a text layer.",
+  noTextFound: "No text found. The document may be a scan without a text layer.",
   extractFailed: "Failed to extract text from PDF.",
   copyFailed: "Failed to copy to clipboard.",
 
@@ -325,7 +325,7 @@ const en = {
   compressImageTitle: "Compress Image",
   compressImageDesc: "Reduce image file size by adjusting quality and dimensions.",
   compressImageDrop: "Drop images here",
-  compressImageDropDesc: "PNG, JPG — select images to compress",
+  compressImageDropDesc: "PNG or JPG files to compress",
   compressImageSettings: "Compress Settings",
   qualityLabel: "Quality",
   maxWidth: "Max Width (px)",
@@ -553,9 +553,9 @@ const en = {
   // Image Resize & Crop
   resizeImage: { title: "Image Resize & Crop", desc: "Resize and crop images to custom dimensions." },
   resizeImageTitle: "Image Resize & Crop",
-  resizeImageDesc: "Resize images to custom dimensions and crop specific areas. All processing happens in your browser.",
+  resizeImageDesc: "Resize images to custom dimensions and crop specific areas.",
   resizeImageDrop: "Drop an image here",
-  resizeImageDropDesc: "PNG, JPG, WebP, GIF, BMP — select an image to resize",
+  resizeImageDropDesc: "PNG, JPG, WebP, GIF, or BMP image.",
   lockAspectRatio: "Lock aspect ratio",
   cropArea: "Crop Area",
   resizeImageBtn: "Resize & Download",
@@ -620,7 +620,7 @@ const en = {
   // CSV to Excel
   csvToExcel: { title: "CSV to Excel", desc: "Convert CSV files to XLSX spreadsheets." },
   csvToExcelTitle: "CSV to Excel",
-  csvToExcelDesc: "Convert CSV files to XLSX Excel spreadsheets. All processing happens in your browser.",
+  csvToExcelDesc: "Convert CSV files to XLSX Excel spreadsheets.",
   csvToExcelDrop: "Drop a CSV file here",
   csvToExcelDropDesc: "Select a CSV file to convert",
   csvToExcelNote: "Converts CSV to Excel format. Supports comma and tab separated values.",
@@ -639,7 +639,7 @@ const en = {
   // JSON Formatter
   json: { title: "JSON Formatter", desc: "Format and validate JSON data." },
   jsonTitle: "JSON Formatter",
-  jsonDesc: "Format, validate, and prettify JSON data. Detect syntax errors instantly.",
+  jsonDesc: "Format, validate, and prettify JSON data with live syntax error detection.",
   jsonPlaceholder: "Paste your JSON here...",
   jsonActions: "Actions",
   jsonNote: "Pretty-print or minify your JSON data.",
@@ -651,7 +651,7 @@ const en = {
   // Excel to CSV
   excelToCsv: { title: "Excel to CSV", desc: "Convert Excel spreadsheets to CSV format." },
   excelToCsvTitle: "Excel to CSV",
-  excelToCsvDesc: "Convert XLSX/XLS Excel spreadsheets to CSV format. All processing happens in your browser.",
+  excelToCsvDesc: "Convert XLSX or XLS spreadsheets to CSV format.",
   excelToCsvDrop: "Drop an Excel file here",
   excelToCsvDropDesc: "Select an XLSX or XLS file to convert",
   excelToCsvNote: "Converts Excel to CSV. Only the first sheet will be converted.",
@@ -690,7 +690,7 @@ const en = {
   // Color Converter
   colorConv: { title: "Color Converter", desc: "Convert between HEX, RGB, and HSL color formats." },
   colorConvTitle: "Color Converter",
-  colorConvDesc: "Convert colors between HEX, RGB, and HSL formats instantly.",
+  colorConvDesc: "Convert colors between HEX, RGB, and HSL formats.",
   colorConvertFailed: "Invalid color value. Check your input format.",
 
   // SVG to PNG
@@ -841,7 +841,7 @@ const en = {
   canva: { title: "Canva Premium", desc: "Get free Canva Pro access with our invite link." },
   canvaTitle: "Canva Premium",
   canvaDesc: "Get free access to Canva Pro features using our team invite link.",
-  canvaHeading: "Canva Pro — Free Access",
+  canvaHeading: "Canva Pro Team Invite",
   canvaDescription: "Join our Canva team to get free access to all premium features including Pro templates, Brand Kit, Background Remover, and more.",
   canvaInviteLink: "Invite Link",
   canvaOpenLink: "Open Canva Invite",
@@ -851,7 +851,7 @@ const en = {
   canvaStep1: "Click the \"Open Canva Invite\" button above",
   canvaStep2: "Sign in or create a free Canva account",
   canvaStep3: "Accept the team invitation",
-  canvaStep4: "Enjoy all Canva Pro features for free!",
+  canvaStep4: "Access Canva Pro features on your account.",
   canvaNote: "Important",
   canvaNoteDesc: "This invite link may expire or have limited slots. If it doesn't work, please contact the admin for a new link.",
 
@@ -871,7 +871,7 @@ const en = {
   // Image Filters
   imageFiltersCard: { title: "Image Filters", desc: "Apply filters and effects to images." },
   imgFilterTitle: "Image Filters & Effects",
-  imgFilterDesc: "Apply various filters and effects to your images. All processing happens in your browser.",
+  imgFilterDesc: "Apply filters and effects to your images.",
   imgFilterDrop: "Drop an image here",
   imgFilterDropDesc: "Supports PNG, JPG, WebP",
   imgFilterSettings: "Filter Settings",
@@ -907,7 +907,7 @@ const en = {
   // YAML ↔ JSON
   yamlJsonCard: { title: "YAML ↔ JSON", desc: "Convert between YAML and JSON formats." },
   yamlJsonTitle: "YAML ↔ JSON Converter",
-  yamlJsonDesc: "Convert data between YAML and JSON formats instantly.",
+  yamlJsonDesc: "Convert data between YAML and JSON formats.",
   yamlJsonPlaceholderYaml: "Paste YAML here...",
   yamlJsonPlaceholderJson: "Paste JSON here...",
   yamlJsonFailed: "Conversion failed:",
@@ -916,7 +916,7 @@ const en = {
   // QR Scanner
   qrScannerCard: { title: "QR Scanner", desc: "Scan QR codes from images or camera." },
   qrScannerTitle: "QR Code Scanner",
-  qrScannerDesc: "Scan QR codes from images or your camera. All processing happens in your browser.",
+  qrScannerDesc: "Scan QR codes from images or your camera.",
   qrScannerDrop: "Drop an image with a QR code",
   qrScannerDropDesc: "Supports PNG, JPG, WebP",
   qrScannerActions: "Scanner Actions",
@@ -968,12 +968,12 @@ const en = {
   jwtInfo: "About JWT",
   jwtDesc2: "JSON Web Tokens consist of three parts: header, payload, and signature. This tool decodes the header and payload (Base64URL encoded).",
   jwtNoteHeader: "The header typically specifies the algorithm and token type.",
-  jwtNotePayload: "The payload contains the claims — data like user ID, expiry, and custom fields.",
+  jwtNotePayload: "The payload contains claims such as user ID, expiry, and custom fields.",
 
   // Code Image
-  codeImageCard: { title: "Code Image", desc: "Create beautiful code screenshots." },
+  codeImageCard: { title: "Code Image", desc: "Export code screenshots with syntax highlighting." },
   codeImageTitle: "Code Image Generator",
-  codeImageDesc: "Create beautiful images of your source code with syntax highlighting. Perfect for sharing on social media and blogs.",
+  codeImageDesc: "Format source code into screenshots with syntax highlighting, window themes, and customizable padding.",
   codeImagePlaceholder: "Paste your code here...",
   codeImageSettings: "Settings",
   codeImageCopy: "Copy",
@@ -998,9 +998,9 @@ const en = {
   codeImageEditor: "Code Editor",
 
   // CSS Gradient
-  gradientCard: { title: "CSS Gradient", desc: "Create beautiful CSS gradients visually." },
+  gradientCard: { title: "CSS Gradient", desc: "Create CSS gradients visually." },
   gradientTitle: "CSS Gradient Generator",
-  gradientDesc: "Create linear and radial CSS gradients with multiple color stops. Copy the CSS code instantly.",
+  gradientDesc: "Create linear and radial CSS gradients with multiple color stops and copy the generated CSS.",
   gradientSettings: "Gradient Settings",
   gradientLinear: "Linear",
   gradientRadial: "Radial",
@@ -1011,7 +1011,7 @@ const en = {
   // CSS Box Shadow
   shadowCard: { title: "CSS Box Shadow", desc: "Create CSS box shadows visually." },
   shadowTitle: "CSS Box Shadow Generator",
-  shadowDesc: "Create and customize CSS box shadows with live preview. Copy the CSS code instantly.",
+  shadowDesc: "Create and customize CSS box shadows with live preview and copy the generated CSS.",
   shadowSettings: "Shadow Settings",
   shadowInset: "Inset",
   shadowHorizontal: "Horizontal",
@@ -1025,7 +1025,7 @@ const en = {
   // Color Palette
   paletteCard: { title: "Color Palette", desc: "Generate harmonious color palettes." },
   paletteTitle: "Color Palette Generator",
-  paletteDesc: "Generate beautiful, harmonious color palettes from a seed color. Perfect for design systems.",
+  paletteDesc: "Generate complementary, analogous, and triadic color palettes with ready-to-use CSS variables.",
   paletteSettings: "Palette Settings",
   paletteSeed: "Seed Color",
   paletteHarmony: "Harmony Type",
@@ -1035,10 +1035,10 @@ const en = {
   // Contrast Checker
   contrastCard: { title: "Contrast Checker", desc: "Check WCAG color contrast ratios." },
   contrastTitle: "Contrast Checker (WCAG)",
-  contrastDesc: "Check color contrast ratios for accessibility compliance. Ensure your text is readable for everyone.",
+  contrastDesc: "Calculate color contrast ratios against WCAG 2.1 AA and AAA standards.",
   contrastHeading: "Heading Text",
   contrastBody: "This is body text to demonstrate the contrast ratio between the foreground and background colors.",
-  contrastSmall: "Small text (12px) — hardest to read with low contrast.",
+  contrastSmall: "Small text (12px): requires higher contrast to meet minimum readability standards.",
   contrastForeground: "Foreground",
   contrastBackground: "Background",
   contrastSwap: "Swap Colors",
@@ -1050,7 +1050,7 @@ const en = {
   // Image Metadata Remover
   metaRemoverCard: { title: "Remove Metadata", desc: "Strip EXIF metadata from images." },
   metaRemoverTitle: "Image Metadata Remover",
-  metaRemoverDesc: "Remove hidden EXIF, IPTC, and XMP metadata from images for privacy. All processing happens in your browser.",
+  metaRemoverDesc: "Remove hidden EXIF, IPTC, and XMP metadata from images.",
   metaRemoverDrop: "Drop an image here",
   metaRemoverDropDesc: "Supports JPG, PNG, WebP",
   metaRemoverInfo: "Metadata Info",
@@ -1077,7 +1077,7 @@ const en = {
   // OG Image
   ogCard: { title: "OG Image", desc: "Create Open Graph social media images." },
   ogTitle: "OG Image Generator",
-  ogDesc: "Create beautiful Open Graph images for social media sharing. Perfect for blogs and websites.",
+  ogDesc: "Create social preview banners with custom typography, presets, and export to PNG.",
   ogSettings: "Settings",
   ogTitle2: "Title",
   ogSubtitle: "Subtitle",
@@ -1089,7 +1089,7 @@ const en = {
   // Invoice Generator
   invoiceCard: { title: "Invoice Generator", desc: "Create professional PDF invoices." },
   invoiceTitle: "Invoice Generator",
-  invoiceDesc: "Create professional invoices and export as PDF. All processing happens in your browser.",
+  invoiceDesc: "Create professional invoices and export as PDF.",
   invoiceSettings: "Invoice Settings",
   invoiceNumber: "Invoice Number",
   invoiceDate: "Date",
@@ -1111,7 +1111,7 @@ const en = {
   // ASCII Art
   asciiCard: { title: "ASCII Art", desc: "Convert images to ASCII art." },
   asciiTitle: "ASCII Art Converter",
-  asciiDesc: "Convert any image into ASCII art text. Unique and fun way to represent images.",
+  asciiDesc: "Convert raster images into monochrome or color ASCII text with configurable width and contrast.",
   asciiDrop: "Drop an image here",
   asciiDropDesc: "Supports PNG, JPG, WebP",
   asciiSettings: "Settings",
@@ -1142,18 +1142,18 @@ const en = {
   exifEditorAboutDesc1: "EXIF (Exchangeable Image File Format) stores camera settings, date, GPS location, and other metadata inside JPEG files.",
   exifEditorAboutDesc2: "You can edit fields like Make, Model, Date, Artist, Copyright, and Description. Read-only fields (ISO, Exposure, F-Number) are set by the camera and cannot be changed.",
   exifEditorNoteTitle: "Note",
-  exifEditorNoteDesc: "Only JPEG files support EXIF editing. PNG, WebP, and other formats do not contain EXIF data. All processing happens in your browser — files are never uploaded to any server.",
+  exifEditorNoteDesc: "Only JPEG files support EXIF editing. PNG, WebP, and other formats do not contain EXIF data. All processing runs locally in memory.",
 
   // HTML Playground
   playgroundCard: { title: "HTML Playground", desc: "Live HTML/CSS/JS editor with preview." },
   playgroundTitle: "HTML/CSS Playground",
-  playgroundDesc: "Write HTML, CSS, and JavaScript with a live preview. Perfect for testing and prototyping.",
+  playgroundDesc: "Write and test HTML, CSS, and JavaScript with an instant side-by-side preview.",
   playgroundPreview: "Live Preview",
 
   // JS Playground
   jsPlaygroundCard: { title: "JS Playground", desc: "Run JavaScript code with live console output." },
   jsPlaygroundTitle: "JavaScript Playground",
-  jsPlaygroundDesc: "Write and run JavaScript code in the browser. See console output instantly.",
+  jsPlaygroundDesc: "Write and run JavaScript code in the browser with live console output.",
   jsPlaygroundRun: "Run",
   jsPlaygroundRunning: "Running...",
   jsPlaygroundClear: "Clear",
@@ -1189,9 +1189,9 @@ const en = {
   sqlPlaygroundPlaceholder: "Write SQL here...",
 
   // GitHub README Generator
-  githubReadmeCard: { title: "GitHub README Generator", desc: "Generate a beautiful README.md from your GitHub profile." },
+  githubReadmeCard: { title: "GitHub README Generator", desc: "Generate a profile README.md from your GitHub account." },
   githubReadmeTitle: "GitHub Profile README Generator",
-  githubReadmeDesc: "Generate a beautiful README.md for your GitHub profile repository. Choose from 12+ themes.",
+  githubReadmeDesc: "Pull repositories and stats from GitHub to build a profile README.md with 12+ themes.",
   githubReadmeUrlLabel: "GitHub Profile URL",
   githubReadmeFetch: "Fetch",
   githubReadmeErrorEmpty: "Please enter a GitHub profile URL",

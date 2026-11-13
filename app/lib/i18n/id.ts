@@ -2,9 +2,9 @@ import type { Translations } from "./en";
 
 const id: Translations = {
   // Landing
-  heroLine1: "Alat online yang menghargai",
-  heroLine2: "privasi Anda",
-  heroDesc: "Konversi, edit, dan kompresi file — semua diproses langsung di browser Anda. Tidak ada yang keluar dari perangkat Anda.",
+  heroLine1: "PlanetKit",
+  heroLine2: "100% di browser Anda",
+  heroDesc: "Konversi, edit, dan optimasi file langsung di browser Anda tanpa perlu mengunggah ke server.",
 
   // Tabs
   tabAll: "Semua",
@@ -80,7 +80,7 @@ const id: Translations = {
   backToHome: "Kembali ke Beranda",
 
   // Footer
-  footerPrivacy: "Semua pemrosesan terjadi di browser Anda. File tidak pernah meninggalkan perangkat Anda.",
+  footerPrivacy: "File diproses secara lokal di browser Anda tanpa perlu diunggah ke server.",
   developedBy: "Dikembangkan oleh",
 
   // Shared errors
@@ -90,7 +90,7 @@ const id: Translations = {
 
   // PDF to Image
   pdfToImageTitle: "PDF ke Gambar",
-  pdfToImageDesc: "Konversi halaman PDF ke gambar PNG atau JPG. Semua pemrosesan terjadi di browser Anda.",
+  pdfToImageDesc: "Konversi halaman PDF ke gambar PNG atau JPG.",
   pdfToImageDrop: "Letakkan file PDF di sini",
   pdfToImageDropDesc: "Mendukung beberapa file PDF",
   outputSettings: "Pengaturan Output",
@@ -106,7 +106,7 @@ const id: Translations = {
   imageToPdfTitle: "Gambar ke PDF",
   imageToPdfDesc: "Gabungkan beberapa gambar menjadi satu dokumen PDF.",
   imageToPdfDrop: "Letakkan gambar di sini",
-  imageToPdfDropDesc: "PNG, JPG — seret untuk mengatur urutan",
+  imageToPdfDropDesc: "Format PNG atau JPG. Seret untuk mengatur urutan.",
   moveLeft: "Pindah kiri",
   remove: "Hapus",
   moveRight: "Pindah kanan",
@@ -131,7 +131,7 @@ const id: Translations = {
   extractingText: "Mengekstrak teks...",
   extractText: "Ekstrak Teks",
   extracting: "Mengekstrak...",
-  noTextFound: "Tidak ada teks ditemukan — ini mungkin dokumen pemindaian tanpa lapisan teks.",
+  noTextFound: "Tidak ada teks ditemukan. Dokumen mungkin berupa hasil pemindaian tanpa lapisan teks.",
   extractFailed: "Gagal mengekstrak teks dari PDF.",
   copyFailed: "Gagal menyalin ke clipboard.",
 
@@ -327,7 +327,7 @@ const id: Translations = {
   compressImageTitle: "Kompresi Gambar",
   compressImageDesc: "Kurangi ukuran file gambar dengan mengatur kualitas dan dimensi.",
   compressImageDrop: "Letakkan gambar di sini",
-  compressImageDropDesc: "PNG, JPG — pilih gambar untuk dikompresi",
+  compressImageDropDesc: "Pilih file PNG atau JPG untuk dikompresi",
   compressImageSettings: "Pengaturan Kompresi",
   qualityLabel: "Kualitas",
   maxWidth: "Lebar Maks (px)",
@@ -555,9 +555,9 @@ const id: Translations = {
   // Image Resize & Crop
   resizeImage: { title: "Resize & Crop Gambar", desc: "Ubah ukuran dan potong gambar sesuai kebutuhan." },
   resizeImageTitle: "Resize & Crop Gambar",
-  resizeImageDesc: "Ubah ukuran gambar ke dimensi kustom dan potong area tertentu. Semua pemrosesan terjadi di browser Anda.",
+  resizeImageDesc: "Ubah ukuran gambar ke dimensi kustom dan potong area tertentu.",
   resizeImageDrop: "Letakkan gambar di sini",
-  resizeImageDropDesc: "PNG, JPG, WebP, GIF, BMP — pilih gambar untuk diubah ukurannya",
+  resizeImageDropDesc: "Pilih gambar format PNG, JPG, WebP, GIF, atau BMP",
   lockAspectRatio: "Kunci rasio aspek",
   cropArea: "Area Potong",
   resizeImageBtn: "Ubah Ukuran & Unduh",
@@ -622,7 +622,7 @@ const id: Translations = {
   // CSV to Excel
   csvToExcel: { title: "CSV ke Excel", desc: "Konversi file CSV ke spreadsheet XLSX." },
   csvToExcelTitle: "CSV ke Excel",
-  csvToExcelDesc: "Konversi file CSV ke spreadsheet Excel XLSX. Semua pemrosesan terjadi di browser.",
+  csvToExcelDesc: "Konversi file CSV ke spreadsheet Excel XLSX.",
   csvToExcelDrop: "Letakkan file CSV di sini",
   csvToExcelDropDesc: "Pilih file CSV untuk dikonversi",
   csvToExcelNote: "Mengkonversi CSV ke format Excel. Mendukung nilai terpisah koma dan tab.",
@@ -641,7 +641,7 @@ const id: Translations = {
   // JSON Formatter
   json: { title: "JSON Formatter", desc: "Format dan validasi data JSON." },
   jsonTitle: "JSON Formatter",
-  jsonDesc: "Format, validasi, dan percantik data JSON. Deteksi kesalahan sintaks secara instan.",
+  jsonDesc: "Format, validasi, dan rapikan data JSON dengan deteksi kesalahan sintaks.",
   jsonPlaceholder: "Tempel JSON Anda di sini...",
   jsonActions: "Aksi",
   jsonNote: "Pretty-print atau minify data JSON Anda.",
@@ -653,7 +653,7 @@ const id: Translations = {
   // Excel to CSV
   excelToCsv: { title: "Excel ke CSV", desc: "Konversi spreadsheet Excel ke format CSV." },
   excelToCsvTitle: "Excel ke CSV",
-  excelToCsvDesc: "Konversi spreadsheet Excel XLSX/XLS ke format CSV. Semua pemrosesan di browser.",
+  excelToCsvDesc: "Konversi spreadsheet Excel XLSX atau XLS ke format CSV.",
   excelToCsvDrop: "Letakkan file Excel di sini",
   excelToCsvDropDesc: "Pilih file XLSX atau XLS untuk dikonversi",
   excelToCsvNote: "Mengkonversi Excel ke CSV. Hingga sheet pertama yang akan dikonversi.",
@@ -692,7 +692,7 @@ const id: Translations = {
   // Color Converter
   colorConv: { title: "Konverter Warna", desc: "Konversi antara format HEX, RGB, dan HSL." },
   colorConvTitle: "Konverter Warna",
-  colorConvDesc: "Konversi warna antara format HEX, RGB, dan HSL secara instan.",
+  colorConvDesc: "Konversi warna antara format HEX, RGB, dan HSL.",
   colorConvertFailed: "Nilai warna tidak valid. Periksa format input Anda.",
 
   // SVG to PNG
@@ -843,8 +843,8 @@ const id: Translations = {
   canva: { title: "Canva Premium", desc: "Dapatkan akses Canva Pro gratis dengan link invite kami." },
   canvaTitle: "Canva Premium",
   canvaDesc: "Dapatkan akses gratis ke fitur Canva Pro menggunakan link tim kami.",
-  canvaHeading: "Canva Pro — Akses Gratis",
-  canvaDescription: "Bergabung dengan tim Canva kami untuk mendapatkan akses gratis ke semua fitur premium termasuk template Pro, Brand Kit, Background Remover, dan lainnya.",
+  canvaHeading: "Undangan Tim Canva Pro",
+  canvaDescription: "Bergabung dengan tim Canva kami untuk mendapatkan akses ke fitur premium termasuk template Pro, Brand Kit, dan Background Remover.",
   canvaInviteLink: "Link Invite",
   canvaOpenLink: "Buka Link Canva",
   canvaLoading: "Memuat link invite...",
@@ -853,7 +853,7 @@ const id: Translations = {
   canvaStep1: "Klik tombol \"Buka Link Canva\" di atas",
   canvaStep2: "Login atau buat akun Canva gratis",
   canvaStep3: "Terima undangan tim",
-  canvaStep4: "Nikmati semua fitur Canva Pro gratis!",
+  canvaStep4: "Gunakan fitur Canva Pro langsung pada akun Anda.",
   canvaNote: "Penting",
   canvaNoteDesc: "Link invite ini mungkin kedaluwarsa atau memiliki slot terbatas. Jika tidak berfungsi, silakan hubungi admin untuk link baru.",
 
@@ -873,7 +873,7 @@ const id: Translations = {
   // Image Filters
   imageFiltersCard: { title: "Filter Gambar", desc: "Terapkan filter dan efek pada gambar." },
   imgFilterTitle: "Filter & Efek Gambar",
-  imgFilterDesc: "Terapkan berbagai filter dan efek pada gambar Anda. Semua pemrosesan terjadi di browser Anda.",
+  imgFilterDesc: "Terapkan berbagai filter dan efek pada gambar Anda.",
   imgFilterDrop: "Letakkan gambar di sini",
   imgFilterDropDesc: "Mendukung PNG, JPG, WebP",
   imgFilterSettings: "Pengaturan Filter",
@@ -909,7 +909,7 @@ const id: Translations = {
   // YAML ↔ JSON
   yamlJsonCard: { title: "YAML ↔ JSON", desc: "Konversi antara format YAML dan JSON." },
   yamlJsonTitle: "Konverter YAML ↔ JSON",
-  yamlJsonDesc: "Konversi data antara format YAML dan JSON secara instan.",
+  yamlJsonDesc: "Konversi data antara format YAML dan JSON.",
   yamlJsonPlaceholderYaml: "Tempel YAML di sini...",
   yamlJsonPlaceholderJson: "Tempel JSON di sini...",
   yamlJsonFailed: "Konversi gagal:",
@@ -918,7 +918,7 @@ const id: Translations = {
   // QR Scanner
   qrScannerCard: { title: "Pindai QR", desc: "Pindai kode QR dari gambar atau kamera." },
   qrScannerTitle: "Pemindai Kode QR",
-  qrScannerDesc: "Pindai kode QR dari gambar atau kamera Anda. Semua pemrosesan terjadi di browser Anda.",
+  qrScannerDesc: "Pindai kode QR dari gambar atau kamera Anda.",
   qrScannerDrop: "Letakkan gambar dengan kode QR",
   qrScannerDropDesc: "Mendukung PNG, JPG, WebP",
   qrScannerActions: "Aksi Pemindai",
@@ -970,12 +970,12 @@ const id: Translations = {
   jwtInfo: "Tentang JWT",
   jwtDesc2: "JSON Web Token terdiri dari tiga bagian: header, payload, dan signature. Alat ini mendekode header dan payload (terkode Base64URL).",
   jwtNoteHeader: "Header biasanya menentukan algoritma dan jenis token.",
-  jwtNotePayload: "Payload berisi klaim — data seperti ID pengguna, kedaluwarsa, dan field kustom.",
+  jwtNotePayload: "Payload berisi klaim seperti ID pengguna, masa kedaluwarsa, dan field kustom.",
 
   // Code Image
-  codeImageCard: { title: "Kode Gambar", desc: "Buat screenshot kode yang indah." },
+  codeImageCard: { title: "Kode Gambar", desc: "Ekspor tangkapan layar kode sumber." },
   codeImageTitle: "Generator Kode Gambar",
-  codeImageDesc: "Buat gambar dari kode sumber Anda dengan syntax highlighting. Sempurna untuk dibagikan di media sosial dan blog.",
+  codeImageDesc: "Format kode sumber menjadi gambar dengan penyorotan sintaks, tema jendela, dan padding yang dapat disesuaikan.",
   codeImagePlaceholder: "Tempel kode Anda di sini...",
   codeImageSettings: "Pengaturan",
   codeImageCopy: "Salin",
@@ -1000,9 +1000,9 @@ const id: Translations = {
   codeImageEditor: "Editor Kode",
 
   // CSS Gradient
-  gradientCard: { title: "CSS Gradient", desc: "Buat gradient CSS yang indah secara visual." },
+  gradientCard: { title: "CSS Gradient", desc: "Buat gradien CSS secara visual." },
   gradientTitle: "Generator CSS Gradient",
-  gradientDesc: "Buat gradient linear dan radial CSS dengan multiple color stops. Salin kode CSS secara instan.",
+  gradientDesc: "Buat gradien linear dan radial CSS dengan multiple color stops dan salin kode CSS.",
   gradientSettings: "Pengaturan Gradient",
   gradientLinear: "Linear",
   gradientRadial: "Radial",
@@ -1013,7 +1013,7 @@ const id: Translations = {
   // CSS Box Shadow
   shadowCard: { title: "CSS Box Shadow", desc: "Buat box shadow CSS secara visual." },
   shadowTitle: "Generator CSS Box Shadow",
-  shadowDesc: "Buat dan kustomisasi box shadow CSS dengan live preview. Salin kode CSS secara instan.",
+  shadowDesc: "Buat dan kustomisasi box shadow CSS dengan live preview dan salin kode CSS.",
   shadowSettings: "Pengaturan Shadow",
   shadowInset: "Inset",
   shadowHorizontal: "Horizontal",
@@ -1025,9 +1025,9 @@ const id: Translations = {
   shadowOutput: "Output CSS",
 
   // Color Palette
-  paletteCard: { title: "Palet Warna", desc: "Buat palet warna yang harmonis." },
+  paletteCard: { title: "Palet Warna", desc: "Hasilkan palet warna yang harmonis." },
   paletteTitle: "Generator Palet Warna",
-  paletteDesc: "Buat palet warna yang harmonis dari seed color. Sempurna untuk design system.",
+  paletteDesc: "Hasilkan palet warna komplementer, analog, dan triadik lengkap dengan variabel CSS.",
   paletteSettings: "Pengaturan Palet",
   paletteSeed: "Seed Color",
   paletteHarmony: "Tipe Harmony",
@@ -1037,10 +1037,10 @@ const id: Translations = {
   // Contrast Checker
   contrastCard: { title: "Pemeriksa Kontras", desc: "Cek rasio kontras warna WCAG." },
   contrastTitle: "Pemeriksa Kontras (WCAG)",
-  contrastDesc: "Cek rasio kontras warna untuk kepatuhan aksesibilitas. Pastikan teks Anda mudah dibaca.",
+  contrastDesc: "Hitung rasio kontras warna teks dan latar berdasarkan standar WCAG 2.1 level AA dan AAA.",
   contrastHeading: "Teks Heading",
   contrastBody: "Ini adalah teks body untuk mendemonstrasikan rasio kontras antara warna foreground dan background.",
-  contrastSmall: "Teks kecil (12px) — paling sulit dibaca dengan kontras rendah.",
+  contrastSmall: "Teks kecil (12px): membutuhkan rasio kontras lebih tinggi agar memenuhi batas keterbacaan.",
   contrastForeground: "Foreground",
   contrastBackground: "Background",
   contrastSwap: "Tukar Warna",
@@ -1052,7 +1052,7 @@ const id: Translations = {
   // Image Metadata Remover
   metaRemoverCard: { title: "Hapus Metadata", desc: "Hapus metadata EXIF dari gambar." },
   metaRemoverTitle: "Penghapus Metadata Gambar",
-  metaRemoverDesc: "Hapus metadata tersembunyi EXIF, IPTC, dan XMP dari gambar untuk privasi. Semua pemrosesan di browser Anda.",
+  metaRemoverDesc: "Hapus metadata tersembunyi EXIF, IPTC, dan XMP dari gambar.",
   metaRemoverDrop: "Letakkan gambar di sini",
   metaRemoverDropDesc: "Mendukung JPG, PNG, WebP",
   metaRemoverInfo: "Info Metadata",
@@ -1079,7 +1079,7 @@ const id: Translations = {
   // OG Image
   ogCard: { title: "Gambar OG", desc: "Buat gambar Open Graph untuk media sosial." },
   ogTitle: "Generator Gambar OG",
-  ogDesc: "Buat gambar Open Graph yang indah untuk berbagi media sosial. Sempurna untuk blog dan website.",
+  ogDesc: "Buat banner pratinjau media sosial dengan tipografi kustom, preset warna, dan ekspor PNG.",
   ogSettings: "Pengaturan",
   ogTitle2: "Judul",
   ogSubtitle: "Subjudul",
@@ -1091,7 +1091,7 @@ const id: Translations = {
   // Invoice Generator
   invoiceCard: { title: "Generator Invoice", desc: "Buat invoice PDF profesional." },
   invoiceTitle: "Generator Invoice",
-  invoiceDesc: "Buat invoice profesional dan ekspor sebagai PDF. Semua pemrosesan di browser Anda.",
+  invoiceDesc: "Buat invoice profesional dan ekspor sebagai PDF.",
   invoiceSettings: "Pengaturan Invoice",
   invoiceNumber: "Nomor Invoice",
   invoiceDate: "Tanggal",
@@ -1113,7 +1113,7 @@ const id: Translations = {
   // ASCII Art
   asciiCard: { title: "ASCII Art", desc: "Konversi gambar ke ASCII art." },
   asciiTitle: "Konverter ASCII Art",
-  asciiDesc: "Konversi gambar apa pun menjadi teks ASCII art. Cara unik dan menyenangkan untuk merepresentasikan gambar.",
+  asciiDesc: "Ubah gambar menjadi karakter teks ASCII dengan lebar dan kontras yang dapat disesuaikan.",
   asciiDrop: "Letakkan gambar di sini",
   asciiDropDesc: "Mendukung PNG, JPG, WebP",
   asciiSettings: "Pengaturan",
@@ -1144,18 +1144,18 @@ const id: Translations = {
   exifEditorAboutDesc1: "EXIF (Exchangeable Image File Format) menyimpan pengaturan kamera, tanggal, lokasi GPS, dan metadata lainnya di dalam file JPEG.",
   exifEditorAboutDesc2: "Anda bisa mengedit field seperti Make, Model, Tanggal, Artist, Hak Cipta, dan Deskripsi. Field read-only (ISO, Exposure, F-Number) ditulis oleh kamera dan tidak bisa diubah.",
   exifEditorNoteTitle: "Catatan",
-  exifEditorNoteDesc: "Hanya file JPEG yang mendukung editing EXIF. PNG, WebP, dan format lain tidak memiliki data EXIF. Semua pemrosesan terjadi di browser Anda — file tidak pernah diunggah ke server mana pun.",
+  exifEditorNoteDesc: "Hanya file JPEG yang mendukung editing EXIF. PNG, WebP, dan format lain tidak memiliki data EXIF. Semua pemrosesan berjalan lokal di memori.",
 
   // HTML Playground
   playgroundCard: { title: "HTML Playground", desc: "Editor HTML/CSS/JS live dengan preview." },
   playgroundTitle: "HTML/CSS Playground",
-  playgroundDesc: "Tulis HTML, CSS, dan JavaScript dengan live preview. Sempurna untuk testing dan prototyping.",
+  playgroundDesc: "Uji kode HTML, CSS, dan JavaScript dengan pratinjau langsung berdampingan.",
   playgroundPreview: "Live Preview",
 
   // JS Playground
   jsPlaygroundCard: { title: "JS Playground", desc: "Jalankan kode JavaScript dengan output konsol live." },
   jsPlaygroundTitle: "JavaScript Playground",
-  jsPlaygroundDesc: "Tulis dan jalankan kode JavaScript di browser. Lihat output konsol secara instan.",
+  jsPlaygroundDesc: "Tulis dan jalankan kode JavaScript di browser dengan output konsol live.",
   jsPlaygroundRun: "Jalankan",
   jsPlaygroundRunning: "Berjalan...",
   jsPlaygroundClear: "Hapus",
@@ -1191,9 +1191,9 @@ const id: Translations = {
   sqlPlaygroundPlaceholder: "Tulis SQL di sini...",
 
   // GitHub README Generator
-  githubReadmeCard: { title: "GitHub README Generator", desc: "Buat README.md menarik dari profil GitHub Anda." },
+  githubReadmeCard: { title: "GitHub README Generator", desc: "Buat README.md profil dari akun GitHub Anda." },
   githubReadmeTitle: "GitHub Profile README Generator",
-  githubReadmeDesc: "Buat README.md menarik untuk profil GitHub Anda. Pilih dari 12+ tema.",
+  githubReadmeDesc: "Ambil repositori dan statistik GitHub untuk menyusun README.md profil dengan 12+ pilihan tema.",
   githubReadmeUrlLabel: "URL Profil GitHub",
   githubReadmeFetch: "Ambil",
   githubReadmeErrorEmpty: "Masukkan URL profil GitHub",

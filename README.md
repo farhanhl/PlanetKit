@@ -2,9 +2,9 @@
 
 # 🪐 PlanetKit
 
-**100% Free All-in-One Online Tools**
+**Free Browser-Based File & Developer Tools**
 
-Convert, merge, split, compress PDFs, generate QR codes, and more — all processed directly in your browser. Nothing ever leaves your device.
+Convert, merge, split, and compress PDFs, generate QR codes, and format data locally in your browser without uploading files to a server.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev)
@@ -122,7 +122,7 @@ planetkit/
 
 ## Key Features
 
-- **Privacy First** — All file processing happens in the browser. No files are uploaded to any server.
+- **Client-Side Processing:** Files are processed entirely in memory inside the browser with zero server uploads.
 - **Lazy Loading** — Heavy libraries (pdf-lib, tesseract.js, etc.) are loaded on-demand per tool.
 - **i18n** — English and Indonesian language support.
 - **Dark/Light Theme** — Automatic theme detection with manual toggle.

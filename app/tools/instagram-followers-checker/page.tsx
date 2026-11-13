@@ -329,8 +329,8 @@ export default function InstagramFollowersCheckerPage() {
                 </h3>
                 <p className="text-xs text-text-secondary mt-0.5">
                   {isIndo
-                    ? "Seluruh data diproses secara lokal di browser Anda. Tidak ada data yang dikirim ke server."
-                    : "All data is processed directly inside your browser. Nothing ever leaves your device."}
+                    ? "File ekspor diproses langsung di memori browser dan tidak pernah dikirim ke server."
+                    : "Your export files are parsed locally in memory and never sent to a server."}
                 </p>
               </div>
             </div>
