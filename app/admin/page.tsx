@@ -186,13 +186,9 @@ export default function AdminPage() {
             </div>
             <div>
               <h1 className="text-lg font-bold text-foreground">Admin Portal</h1>
-              <p className="text-xs text-text-secondary">PlanetKit Admin & Analytics</p>
             </div>
           </div>
 
-          <p className="mb-4 text-sm text-text-secondary">
-            Masukkan password admin untuk mengakses pengaturan sistem & data analitik.
-          </p>
 
           <form onSubmit={handleLogin}>
             <input
@@ -244,9 +240,8 @@ export default function AdminPage() {
           className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:border-accent/40 hover:text-foreground"
         >
           <RefreshCw
-            className={`h-3.5 w-3.5 ${
-              settingsLoading || analyticsLoading ? "animate-spin" : ""
-            }`}
+            className={`h-3.5 w-3.5 ${settingsLoading || analyticsLoading ? "animate-spin" : ""
+              }`}
           />
           Segarkan Data
         </button>
@@ -256,11 +251,10 @@ export default function AdminPage() {
       <div className="mb-6 flex border-b border-border">
         <button
           onClick={() => setActiveTab("settings")}
-          className={`flex items-center gap-2 border-b-2 px-5 py-3 text-sm font-medium transition-colors ${
-            activeTab === "settings"
-              ? "border-accent text-accent"
-              : "border-transparent text-text-secondary hover:text-foreground"
-          }`}
+          className={`flex items-center gap-2 border-b-2 px-5 py-3 text-sm font-medium transition-colors ${activeTab === "settings"
+            ? "border-accent text-accent"
+            : "border-transparent text-text-secondary hover:text-foreground"
+            }`}
         >
           <Settings className="h-4 w-4" />
           Konfigurasi Firebase
@@ -270,11 +264,10 @@ export default function AdminPage() {
             setActiveTab("analytics");
             fetchAnalytics();
           }}
-          className={`flex items-center gap-2 border-b-2 px-5 py-3 text-sm font-medium transition-colors ${
-            activeTab === "analytics"
-              ? "border-accent text-accent"
-              : "border-transparent text-text-secondary hover:text-foreground"
-          }`}
+          className={`flex items-center gap-2 border-b-2 px-5 py-3 text-sm font-medium transition-colors ${activeTab === "analytics"
+            ? "border-accent text-accent"
+            : "border-transparent text-text-secondary hover:text-foreground"
+            }`}
         >
           <BarChart3 className="h-4 w-4" />
           Statistik & Analitik
