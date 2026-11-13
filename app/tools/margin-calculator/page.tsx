@@ -29,14 +29,15 @@ export default function MarginCalculatorPage() {
   const [leverage, setLeverage] = useState("100");
   const [accountCurrency, setAccountCurrency] = useState("USD");
 
-  const lots = parseFloat(lotSize) || 0;
-  const lev = parseInt(leverage) || 100;
+  const lots = Math.max(0, parseFloat(lotSize) || 0);
+  const parsedLev = parseInt(leverage);
+  const lev = parsedLev > 0 ? parsedLev : 100;
   const contractSize = lots * 100000;
   const marginRequired = contractSize / lev;
 
   const format = (n: number) => {
     if (n === 0) return "0";
-    if (n < 1) return n.toFixed(2);
+    if (n < 0.01) return n.toFixed(4);
     return n.toFixed(2);
   };
 

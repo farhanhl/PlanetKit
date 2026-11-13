@@ -23,8 +23,8 @@ export default function ProfitCalculatorPage() {
   const contract = parseFloat(contractSize) || 100000;
 
   const pips = pip > 0 ? Math.abs(exit - entry) / pip : 0;
-  const profitPips = pips * lots * (exit > entry ? 1 : exit < entry ? -1 : 0);
-  const profitUSD = profitPips * pip * contract;
+  const directionMultiplier = exit > entry ? 1 : exit < entry ? -1 : 0;
+  const profitUSD = pips * pip * contract * lots * directionMultiplier;
 
   const format = (n: number) => {
     if (n === 0) return "0";

@@ -84,7 +84,8 @@ export default function ImageExifEditorPage() {
     setDataUrl("");
     setExifObj(null);
 
-    if (!f.type.includes("jpeg") && !f.type.includes("jpg")) {
+    const isJpeg = f.type === "image/jpeg" || f.name.toLowerCase().endsWith(".jpg") || f.name.toLowerCase().endsWith(".jpeg");
+    if (!isJpeg) {
       setError(t.exifEditorJpegOnly);
       return;
     }

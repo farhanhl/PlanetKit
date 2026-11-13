@@ -5,7 +5,9 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 const isDev = process.env.NODE_ENV !== "production";
 
 if (!process.env.REMOVEBG_API_KEY) {
-  throw new Error("REMOVEBG_API_KEY environment variable is not set.");
+  if (process.env.NODE_ENV === "production") {
+    console.warn("Warning: REMOVEBG_API_KEY environment variable is not set.");
+  }
 }
 
 const securityHeaders = [

@@ -44,6 +44,10 @@ export default function DeletePagesPage() {
 
   const deletePages = async () => {
     if (!file || selected.size === 0) return;
+    if (selected.size >= pageCount) {
+      setError(t.deletePagesFailed);
+      return;
+    }
     setProcessing(true);
     setError(null);
     try {

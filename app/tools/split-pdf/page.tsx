@@ -115,6 +115,12 @@ export default function SplitPdfPage() {
               (p) => !selectedPages.has(p)
             );
 
+      if (pagesToCopy.length === 0) {
+        setError(t.splitFailed);
+        setProcessing(false);
+        return;
+      }
+
       setProgress(50);
       const copiedPages = await newPdf.copyPages(pdf, pagesToCopy.map((p) => p - 1));
       copiedPages.forEach((p) => newPdf.addPage(p));

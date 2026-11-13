@@ -69,7 +69,7 @@ export default function CssGradientPage() {
               const sorted = [...stops].sort((a, b) => a.position - b.position);
               const stopsStr = sorted.map((s) => `${s.color} ${s.position}%`).join(", ");
               return (
-                <div className="relative h-8 w-full rounded-lg border border-border" style={{ background: stopsStr }} />
+                <div className="relative h-8 w-full rounded-lg border border-border" style={{ background: `linear-gradient(90deg, ${stopsStr})` }} />
               );
             })()}
             <div>

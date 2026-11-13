@@ -21,11 +21,13 @@ export default function RegexTesterPage() {
     try {
       const regex = new RegExp(pattern, flags);
       const results: { match: string; index: number }[] = [];
+      const MAX_MATCHES = 2000;
       if (flags.includes("g")) {
         let m;
         while ((m = regex.exec(testStr)) !== null) {
           results.push({ match: m[0], index: m.index });
           if (m[0] === "") regex.lastIndex++;
+          if (results.length >= MAX_MATCHES) break;
         }
       } else {
         const m = regex.exec(testStr);

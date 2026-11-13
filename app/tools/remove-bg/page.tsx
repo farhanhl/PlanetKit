@@ -42,8 +42,12 @@ export default function RemoveBgPage() {
         if (!cancelled && !data.error) setCredits(data);
       })
       .catch(() => {})
-      .finally(() => { if (!cancelled) setCreditsLoading(false); });
-    return () => { cancelled = true; };
+      .finally(() => {
+        if (!cancelled) setCreditsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleFile = useCallback((files: File[]) => {
@@ -113,8 +117,14 @@ export default function RemoveBgPage() {
 
   const reset = () => {
     setOriginalFile(null);
-    setOriginalUrl("");
-    setResultUrl("");
+    setOriginalUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return "";
+    });
+    setResultUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return "";
+    });
     setError(null);
     setActiveTab("original");
   };

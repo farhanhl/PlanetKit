@@ -6,14 +6,19 @@ import { useLang } from "@/app/lib/i18n/context";
 import ToolPageLayout from "@/app/components/ToolPageLayout";
 import ToolSeo from "@/app/components/ToolSeo";
 
+function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function toSlug(text: string, opts: { lowercase: boolean; removeSpecial: boolean; separator: string }): string {
+  const sep = escapeRegExp(opts.separator);
   const slug = text
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^\w\s-]/g, opts.removeSpecial ? "" : " ")
     .replace(/[\s_]+/g, opts.separator)
-    .replace(new RegExp(`${opts.separator}+`, "g"), opts.separator)
-    .replace(new RegExp(`^${opts.separator}|${opts.separator}$`, "g"), "");
+    .replace(new RegExp(`${sep}+`, "g"), opts.separator)
+    .replace(new RegExp(`^${sep}|${sep}$`, "g"), "");
   return opts.lowercase ? slug.toLowerCase() : slug;
 }
 

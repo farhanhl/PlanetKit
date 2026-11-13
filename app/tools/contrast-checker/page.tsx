@@ -6,7 +6,14 @@ import ToolPageLayout from "@/app/components/ToolPageLayout";
 import ToolSeo from "@/app/components/ToolSeo";
 
 function hexToRgb(hex: string): [number, number, number] {
-  return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+  let cleaned = hex.trim().replace(/^#/, "");
+  if (cleaned.length === 3) {
+    cleaned = cleaned.split("").map((c) => c + c).join("");
+  }
+  if (cleaned.length !== 6 || !/^[0-9a-fA-F]{6}$/.test(cleaned)) {
+    return [0, 0, 0];
+  }
+  return [parseInt(cleaned.slice(0, 2), 16), parseInt(cleaned.slice(2, 4), 16), parseInt(cleaned.slice(4, 6), 16)];
 }
 
 function luminance(r: number, g: number, b: number): number {

@@ -40,6 +40,14 @@ const typeIcon = {
   file: File,
 };
 
+function extractSurl(rawUrl: string): string {
+  const surlParam = rawUrl.match(/surl=([^&]+)/)?.[1];
+  if (surlParam) return surlParam;
+  const sPath = rawUrl.match(/\/s\/(?:1)?([a-zA-Z0-9_-]+)/)?.[1];
+  if (sPath) return sPath;
+  return "";
+}
+
 export default function TeraBoxDownloaderPage() {
   const { t } = useLang();
   const [url, setUrl] = useState("");
@@ -94,7 +102,7 @@ export default function TeraBoxDownloaderPage() {
         a.click();
         document.body.removeChild(a);
       } else {
-        const surl = url.match(/surl=([^&]+)/)?.[1] || "";
+        const surl = extractSurl(url);
         window.open(
           `https://1024terabox.com/sharing/link?surl=${surl}`,
           "_blank"
@@ -181,9 +189,7 @@ export default function TeraBoxDownloaderPage() {
                   </div>
                   {!hasDlink && (
                     <a
-                      href={`https://1024terabox.com/sharing/link?surl=${
-                        url.match(/surl=([^&]+)/)?.[1] || ""
-                      }`}
+                      href={`https://1024terabox.com/sharing/link?surl=${extractSurl(url)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-1.5 rounded-lg bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-accent/20"

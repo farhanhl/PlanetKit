@@ -56,7 +56,7 @@ export default function LoremIpsumPage() {
     } catch {}
   };
 
-  const wordCount = text.trim().split(/\s+/).length;
+  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   return (
     <>

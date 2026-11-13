@@ -41,7 +41,7 @@ export default function ImageToTextPage() {
       const texts: string[] = [];
 
       for (let i = 0; i < files.length; i++) {
-        setProgress(((i + 1) / files.length) * 100);
+        setProgress((i / files.length) * 100);
         const result = await Tesseract.recognize(files[i], "eng", {
           logger: (m) => {
             if (m.status === "recognizing text") {

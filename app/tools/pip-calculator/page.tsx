@@ -32,6 +32,11 @@ const PIP_VALUES: Record<string, number> = {
 
 const PAIR_LIST = Object.keys(PIP_VALUES);
 
+const CONTRACT_SIZES: Record<string, number> = {
+  "XAU/USD": 100,
+  "XAG/USD": 5000,
+};
+
 export default function PipCalculatorPage() {
   const { t } = useLang();
   const [pair, setPair] = useState("EUR/USD");
@@ -46,8 +51,9 @@ export default function PipCalculatorPage() {
   const exit = parseFloat(exitPrice) || 0;
   const lots = parseFloat(lotSize) || 0;
 
+  const contractSize = CONTRACT_SIZES[pair] || 100000;
   const pips = pipSize > 0 ? Math.abs(exit - entry) / pipSize : 0;
-  const profit = pips * pipSize * lots * 100000;
+  const profit = pips * pipSize * lots * contractSize;
 
   const format = (n: number) => {
     if (n === 0) return "0";

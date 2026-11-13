@@ -11,8 +11,21 @@ function decodeJwt(token: string): { header: object; payload: object; isValid: b
     const parts = token.trim().split(".");
     if (parts.length < 2) return { header: {}, payload: {}, isValid: false, error: "Invalid JWT format" };
 
-    const header = JSON.parse(atob(parts[0].replace(/-/g, "+").replace(/_/g, "/")));
-    const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+    const base64UrlDecode = (str: string) => {
+      let base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+      while (base64.length % 4 !== 0) {
+        base64 += "=";
+      }
+      return decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+    };
+
+    const header = JSON.parse(base64UrlDecode(parts[0]));
+    const payload = JSON.parse(base64UrlDecode(parts[1]));
     return { header, payload, isValid: true };
   } catch (e) {
     return { header: {}, payload: {}, isValid: false, error: e instanceof Error ? e.message : "Invalid JWT" };
