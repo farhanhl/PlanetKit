@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { FileText, Copy, Download } from "lucide-react";
+import Link from "next/link";
+import { FileText, Copy, Download, ScanText } from "lucide-react";
 import ToolPageLayout from "@/app/components/ToolPageLayout";
 import FileUploader from "@/app/components/FileUploader";
 import ProgressBar from "@/app/components/ProgressBar";
@@ -107,8 +108,22 @@ export default function PdfToTextPage() {
           />
 
           {error && (
-            <div className="mt-4 rounded-lg border border-error/30 bg-error/5 p-3 text-sm text-error">
-              {error}
+            <div className="mt-4 rounded-xl border border-error/30 bg-error/5 p-4 text-sm text-error">
+              <p>{error}</p>
+              {error === t.noTextFound && (
+                <div className="mt-3 flex items-center gap-3">
+                  <Link
+                    href="/tools/pdf-ocr"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-background transition-colors hover:bg-accent-hover"
+                  >
+                    <ScanText className="h-3.5 w-3.5" />
+                    Pindai dengan PDF OCR
+                  </Link>
+                  <span className="text-xs text-text-secondary">
+                    Gunakan OCR untuk mengekstrak teks dari gambar/dokumen hasil scan.
+                  </span>
+                </div>
+              )}
             </div>
           )}
 

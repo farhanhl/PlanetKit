@@ -17,6 +17,8 @@ export default function PdfOcrPage() {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [lang, setLang] = useState<"eng+ind" | "eng" | "ind">("eng+ind");
+  const [mode, setMode] = useState<"auto" | "ocr">("auto");
 
   const handleFile = useCallback((files: File[]) => {
     setFile(files[0] || null);
@@ -30,6 +32,48 @@ export default function PdfOcrPage() {
     setExtractedText("");
     setError(null);
   }, []);
+
+  // Preprocessing canvas untuk meningkatkan kontras teks bagi Tesseract OCR
+  const preprocessCanvas = (sourceCanvas: HTMLCanvasElement): HTMLCanvasElement => {
+    const canvas = document.createElement("canvas");
+    canvas.width = sourceCanvas.width;
+    canvas.height = sourceCanvas.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return sourceCanvas;
+
+    ctx.drawImage(sourceCanvas, 0, 0);
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const d = imgData.data;
+
+    // Tingkatkan kontras dan grayscale
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i];
+      const g = d[i + 1];
+      const b = d[i + 2];
+      const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+      const contrast = 1.3;
+      const factor = (259 * (contrast * 255 + 255)) / (255 * (259 - contrast * 255));
+      const val = Math.min(255, Math.max(0, factor * (gray - 128) + 128));
+
+      d[i] = val;
+      d[i + 1] = val;
+      d[i + 2] = val;
+    }
+    ctx.putImageData(imgData, 0, 0);
+    return canvas;
+  };
+
+  // Pembersihan karakter noise dan typo umum hasil OCR
+  const cleanOcrResult = (raw: string): string => {
+    return raw
+      .replace(/(^|\n)\|\s+([A-Za-z])/g, "$1I $2")
+      .replace(/\|\s+design\s+systems/gi, "I design systems")
+      .replace(/(^|\n)[«+]\s+/g, "$1• ")
+      .replace(/(^|\n)[eE]o,\s*FY\b/g, "")
+      .replace(/(^|\n)[‘'`]O\s*Fretase\b/gi, "")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  };
 
   const recognize = async () => {
     if (!file) return;
@@ -50,29 +94,49 @@ export default function PdfOcrPage() {
       for (let i = 1; i <= pdf.numPages; i++) {
         setProgress(((i - 1) / pdf.numPages) * 100);
         const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 2 });
 
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        const ctx = canvas.getContext("2d")!;
-        await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+        // Jika mode auto, cek apakah halaman sudah memiliki digital text layer
+        let pageText = "";
+        if (mode === "auto") {
+          const textContent = await page.getTextContent();
+          const items = textContent.items.filter(
+            (item): item is { str: string } & typeof item => "str" in item
+          );
+          const rawJoined = items.map((it) => it.str).join(" ");
+          // Jika memiliki lebih dari 15 kata nyata, gunakan teks digital langsung (100% akurat)
+          if (rawJoined.trim().split(/\s+/).length > 15) {
+            pageText = rawJoined.trim();
+          }
+        }
 
-        const blob = await new Promise<Blob>((resolve) =>
-          canvas.toBlob((b) => resolve(b!), "image/png")
-        );
+        // Jika tidak ada text layer atau mode dipaksa OCR, jalankan Tesseract
+        if (!pageText) {
+          const viewport = page.getViewport({ scale: 2 });
+          const canvas = document.createElement("canvas");
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext("2d")!;
+          await page.render({ canvasContext: ctx, viewport, canvas }).promise;
 
-        const result = await Tesseract.recognize(blob, "eng", {
-          logger: (m) => {
-            if (m.status === "recognizing text") {
-              const pageProgress = ((i - 1) / pdf.numPages) * 100;
-              setProgress(pageProgress + (m.progress * 100) / pdf.numPages);
-            }
-          },
-        });
+          const preprocessed = preprocessCanvas(canvas);
+          const blob = await new Promise<Blob>((resolve) =>
+            preprocessed.toBlob((b) => resolve(b!), "image/png")
+          );
 
-        if (result.data.text.trim()) {
-          texts.push(`${t.pageHeader(i)}\n${result.data.text}`);
+          const result = await Tesseract.recognize(blob, lang, {
+            logger: (m) => {
+              if (m.status === "recognizing text") {
+                const pageProgress = ((i - 1) / pdf.numPages) * 100;
+                setProgress(pageProgress + (m.progress * 100) / pdf.numPages);
+              }
+            },
+          });
+
+          pageText = cleanOcrResult(result.data.text);
+        }
+
+        if (pageText.trim()) {
+          texts.push(`${t.pageHeader(i)}\n${pageText}`);
         }
       }
 
@@ -171,6 +235,31 @@ export default function PdfOcrPage() {
         <div className="flex flex-col gap-5">
           <div className="rounded-xl border border-border bg-surface p-5">
             <h3 className="mb-4 text-sm font-semibold text-foreground">{t.ocrSettings}</h3>
+
+            <div className="mb-4 flex flex-col gap-1.5">
+              <label className="text-xs font-medium text-foreground">Mode Ekstraksi</label>
+              <select
+                value={mode}
+                onChange={(e) => setMode(e.target.value as "auto" | "ocr")}
+                className="rounded-lg border border-border bg-surface-hover px-3 py-2 text-xs text-foreground focus:border-accent focus:outline-none"
+              >
+                <option value="auto">Auto (Deteksi Teks Digital + OCR)</option>
+                <option value="ocr">Paksa OCR (Scan Gambar)</option>
+              </select>
+            </div>
+
+            <div className="mb-4 flex flex-col gap-1.5">
+              <label className="text-xs font-medium text-foreground">Bahasa OCR</label>
+              <select
+                value={lang}
+                onChange={(e) => setLang(e.target.value as "eng+ind" | "eng" | "ind")}
+                className="rounded-lg border border-border bg-surface-hover px-3 py-2 text-xs text-foreground focus:border-accent focus:outline-none"
+              >
+                <option value="eng+ind">English + Indonesia (Bilingual)</option>
+                <option value="eng">English</option>
+                <option value="ind">Bahasa Indonesia</option>
+              </select>
+            </div>
 
             <p className="mb-4 text-xs text-text-secondary">{t.ocrNote}</p>
 

@@ -19,7 +19,7 @@ export default function Footer() {
         <p className="text-xs text-text-secondary">
           {t.developedBy}{" "}
           <a
-            href="https://www.farhanhl.dev/"
+            href="https://farhanhl.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-accent transition-colors hover:text-accent-hover"
