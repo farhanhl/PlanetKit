@@ -1,15 +1,24 @@
 import { NextResponse } from "next/server";
+import { getAppConfig } from "@/app/lib/settings";
 
 const REMOVEBG_API = "https://api.remove.bg/v1.0/removebg";
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    const config = await getAppConfig();
+    const apiKey = config.removeBgApiKey;
+
+    if (!apiKey) {
+      return NextResponse.json({ error: "Remove.bg API key not configured" }, { status: 500 });
+    }
+
     const formData = await request.formData();
 
     const res = await fetch(REMOVEBG_API, {
       method: "POST",
       headers: {
-        "X-Api-Key": process.env.REMOVEBG_API_KEY!,
+        "X-Api-Key": apiKey,
       },
       body: formData,
     });

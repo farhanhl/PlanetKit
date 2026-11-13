@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getAppConfig } from "@/app/lib/settings";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const config = await getAppConfig();
+  const botToken = config.telegramBotToken;
+  const chatId = config.telegramChatId;
 
   if (!botToken || !chatId) {
     return NextResponse.json({ error: "Telegram config missing" }, { status: 500 });
   }
 
   const body = await req.json().catch(() => ({}));
-  const ip = body.ip || "unknown";
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || body.ip || "unknown";
   const location = body.location || "Unknown";
 
   const userAgent = req.headers.get("user-agent") || "unknown";
