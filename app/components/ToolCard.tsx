@@ -1,8 +1,5 @@
-﻿"use client";
-
-import Link from "next/link";
+﻿import Link from "next/link";
 import { LucideIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 
 interface ToolCardProps {
   href: string;
@@ -21,39 +18,13 @@ export default function ToolCard({
   description,
   color,
   anim,
-  index = 0,
 }: ToolCardProps) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.05 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const delay = `${index * 40}ms`;
-
   return (
     <Link
-      ref={ref}
       href={href}
-      className="group flex flex-col gap-4 rounded-2xl border border-border bg-surface p-6 transition-colors hover:bg-surface-hover sm:p-8"
+      className="group flex flex-col gap-4 rounded-2xl border border-border bg-surface p-6 transition-all duration-200 hover:bg-surface-hover sm:p-8"
       style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(24px)",
-        transition: `opacity 0.5s cubic-bezier(0.4,0,0.2,1) ${delay}, transform 0.5s cubic-bezier(0.4,0,0.2,1) ${delay}, border-color 0.3s ease`,
-        borderColor: visible ? `${color}30` : undefined,
+        borderColor: `${color}30`,
       }}
     >
       <div
