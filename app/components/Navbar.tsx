@@ -66,10 +66,11 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-border text-text-secondary transition-colors hover:border-accent/40 hover:text-foreground"
+            className="relative flex h-9 w-9 cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-border text-text-secondary transition-colors hover:border-accent/40 hover:text-foreground"
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            <Sun className={`h-4 w-4 transition-all duration-300 ${theme === "dark" ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"}`} />
+            <Moon className={`absolute h-4 w-4 transition-all duration-300 ${theme === "dark" ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"}`} />
           </button>
 
           <ShareButton />

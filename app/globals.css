@@ -153,6 +153,41 @@ body {
   color: var(--foreground);
 }
 
+/* ============================================
+   SMOOTH THEME TRANSITION
+   ============================================ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html,
+body,
+header,
+nav,
+footer,
+main,
+section,
+article,
+aside,
+div,
+span,
+p,
+a,
+button,
+input,
+textarea,
+select,
+label,
+table,
+th,
+td {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.35s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }

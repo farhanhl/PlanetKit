@@ -72,11 +72,22 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    try {
-      localStorage.setItem("planet-theme", next);
-      document.documentElement.setAttribute("data-theme", next);
-    } catch {}
+    const applyTheme = () => {
+      setTheme(next);
+      try {
+        localStorage.setItem("planet-theme", next);
+        document.documentElement.setAttribute("data-theme", next);
+      } catch {}
+    };
+
+    if (typeof document !== "undefined" && "startViewTransition" in document) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (document as any).startViewTransition(() => {
+        applyTheme();
+      });
+    } else {
+      applyTheme();
+    }
   };
 
   if (!t) return null;

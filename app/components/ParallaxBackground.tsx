@@ -255,7 +255,7 @@ export default function ParallaxBackground() {
     >
       {/* Subtle radial vignette — adapts to theme via CSS variable */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 transition-opacity duration-300"
         style={{
           background: "radial-gradient(ellipse 70% 60% at 50% 40%, transparent 0%, var(--vignette-color) 100%)",
           zIndex: 1,
@@ -265,12 +265,12 @@ export default function ParallaxBackground() {
       {/* Canvas for Constellation Lines */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0"
+        className="absolute inset-0 transition-[filter,opacity] duration-300"
         style={{ zIndex: 2, filter: "var(--parallax-filter, none)" }}
       />
 
       {/* Floating icons (DOM) */}
-      <div className="absolute inset-0" style={{ zIndex: 3, filter: "var(--parallax-filter, none)" }}>
+      <div className="absolute inset-0 transition-[filter,opacity] duration-300" style={{ zIndex: 3, filter: "var(--parallax-filter, none)" }}>
         {particles.map((p) => {
           const { Icon, id, baseX, baseY, size, color, opacity } = p;
           return (
