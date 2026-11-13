@@ -27,22 +27,33 @@ export default function MarkdownToPdfPage() {
 <head>
 <meta charset="utf-8">
 <style>
-  body { font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; line-height: 1.6; }
-  h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; color: #111; }
-  h1 { font-size: 2em; border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
-  h2 { font-size: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 0.2em; }
-  p { margin: 0.8em 0; }
-  code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-  pre { background: #f4f4f4; padding: 16px; border-radius: 8px; overflow-x: auto; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.65;
+    margin: 0;
+    padding: 32px;
+    background: #ffffff;
+    font-size: 14px;
+  }
+  h1, h2, h3, h4, h5, h6 { margin-top: 1.4em; margin-bottom: 0.5em; color: #0f172a; font-weight: 700; }
+  h1 { font-size: 2.1em; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3em; }
+  h2 { font-size: 1.6em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.25em; }
+  h3 { font-size: 1.3em; }
+  p { margin: 0.75em 0; }
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; font-family: monospace; }
+  pre { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 6px; overflow-x: auto; }
   pre code { background: none; padding: 0; }
-  blockquote { border-left: 4px solid #D4A853; margin: 1em 0; padding: 0.5em 1em; background: #fafafa; }
-  table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-  th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
-  th { background: #f4f4f4; }
-  img { max-width: 100%; }
-  a { color: #D4A853; }
-  ul, ol { padding-left: 2em; }
-  li { margin: 0.3em 0; }
+  blockquote { border-left: 4px solid #D4A853; margin: 1em 0; padding: 0.5em 1em; background: #fefce8; color: #4b5563; }
+  table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: 13px; }
+  th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
+  th { background: #f8fafc; font-weight: 600; }
+  img { max-width: 100%; height: auto; border-radius: 4px; }
+  a { color: #2563eb; text-decoration: underline; }
+  ul, ol { padding-left: 1.8em; margin: 0.8em 0; }
+  li { margin: 0.25em 0; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 1.5em 0; }
 </style>
 </head>
 <body>${htmlBody}</body>
@@ -51,35 +62,82 @@ export default function MarkdownToPdfPage() {
       const { default: html2canvas } = await import("html2canvas-pro");
       const { default: jsPDF } = await import("jspdf");
 
-      const container = document.createElement("div");
-      container.style.cssText = "position:absolute;left:-9999px;width:800px;background:white;color:#1a1a1a;";
-      container.innerHTML = html;
-      document.body.appendChild(container);
+      // Gunakan isolated iframe agar style (seperti CSS body) tidak bocor ke halaman web
+      const iframe = document.createElement("iframe");
+      iframe.style.cssText = "position:fixed;top:-99999px;left:-99999px;width:800px;border:none;visibility:hidden;";
+      document.body.appendChild(iframe);
 
-      const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-      document.body.removeChild(container);
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (!iframeDoc) {
+        document.body.removeChild(iframe);
+        throw new Error("Failed to create isolated document");
+      }
 
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      iframeDoc.open();
+      iframeDoc.write(html);
+      iframeDoc.close();
+
+      // Tunggu sebentar agar render DOM dan font selesai
+      await new Promise((resolve) => setTimeout(resolve, 80));
+
+      const targetEl = iframeDoc.body;
+      const canvas = await html2canvas(targetEl, {
+        scale: 1.5,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+
+      document.body.removeChild(iframe);
+
+      // Konfigurasi Margin & Ukuran A4 (210 x 297 mm)
+      const marginX = 15; // margin kiri & kanan 15mm
+      const marginY = 15; // margin atas & bawah 15mm
+      const contentWidthMm = 210 - marginX * 2; // 180mm
+      const pageHeightMm = 297 - marginY * 2; // 267mm
+
+      const pxPerMm = canvas.width / contentWidthMm;
+      const sliceHeightPx = Math.floor(pageHeightMm * pxPerMm);
+
       const pdf = new jsPDF("p", "mm", "a4");
 
-      const pageHeight = 297;
-      let y = 0;
-      let remaining = imgHeight;
+      let sourceY = 0;
+      let pageIndex = 0;
 
-      while (remaining > 0) {
-        if (y > 0) pdf.addPage();
-        const sliceHeight = Math.min(pageHeight, remaining);
-        const sliceRatio = sliceHeight / imgHeight;
+      while (sourceY < canvas.height) {
+        if (pageIndex > 0) {
+          pdf.addPage();
+        }
+
+        const currentSlicePx = Math.min(sliceHeightPx, canvas.height - sourceY);
+        const currentSliceMm = currentSlicePx / pxPerMm;
+
         const sliceCanvas = document.createElement("canvas");
         sliceCanvas.width = canvas.width;
-        sliceCanvas.height = canvas.height * sliceRatio;
-        const ctx = sliceCanvas.getContext("2d")!;
-        ctx.drawImage(canvas, 0, -y * (canvas.height / imgHeight), canvas.width, canvas.height);
+        sliceCanvas.height = currentSlicePx;
+        const ctx = sliceCanvas.getContext("2d");
 
-        pdf.addImage(sliceCanvas.toDataURL("image/png"), "PNG", 0, 0, imgWidth, sliceHeight);
-        y += pageHeight;
-        remaining -= sliceHeight;
+        if (ctx) {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+          ctx.drawImage(
+            canvas,
+            0,
+            sourceY,
+            canvas.width,
+            currentSlicePx,
+            0,
+            0,
+            canvas.width,
+            currentSlicePx
+          );
+
+          // Gunakan JPEG kualitas 0.85 untuk kompresi file optimal (mengecilkan ukuran hingga >90%)
+          const imgData = sliceCanvas.toDataURL("image/jpeg", 0.85);
+          pdf.addImage(imgData, "JPEG", marginX, marginY, contentWidthMm, currentSliceMm, undefined, "FAST");
+        }
+
+        sourceY += currentSlicePx;
+        pageIndex++;
       }
 
       pdf.save("markdown.pdf");

@@ -23,6 +23,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://planetkit.vercel.app"),
   title: {
     default: "PlanetKit | Free Browser-Based File & Developer Tools",
     template: "%s | PlanetKit",
