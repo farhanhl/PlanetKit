@@ -195,7 +195,6 @@ export default function MarkdownToPdfPage() {
 
           // Tambahkan layer teks tak terlihat (Searchable & Selectable Text Layer)
           try {
-            pdf.internal.write("3 Tr"); // Mode 3: Invisible text (bisa diseleksi & dicari tanpa menutupi gambar)
             pdf.setFont("helvetica", "normal");
 
             for (const el of blockElements) {
@@ -215,13 +214,14 @@ export default function MarkdownToPdfPage() {
                 }
 
                 const lines = pdf.splitTextToSize(el.text, contentWidthMm);
-                pdf.text(lines, xMm, yMm);
+                pdf.text(lines, xMm, yMm, {
+                  maxWidth: contentWidthMm,
+                  renderingMode: "invisible",
+                });
               }
             }
           } catch {
             // Abaikan jika browser tidak mendukung text stream injection
-          } finally {
-            pdf.internal.write("0 Tr"); // Kembalikan mode teks normal
           }
         }
 
