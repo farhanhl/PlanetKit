@@ -34,12 +34,29 @@ export default function SvgToPngPage() {
         img.onerror = reject;
         img.src = preview;
       });
+      let baseWidth = img.naturalWidth;
+      let baseHeight = img.naturalHeight;
+
+      if (!baseWidth || !baseHeight) {
+        try {
+          const svgText = await file.text();
+          const viewBoxMatch = svgText.match(/viewBox=["']\s*[\d.-]+\s+[\d.-]+\s+([\d.]+)\s+([\d.]+)\s*["']/i);
+          if (viewBoxMatch) {
+            baseWidth = parseFloat(viewBoxMatch[1]);
+            baseHeight = parseFloat(viewBoxMatch[2]);
+          }
+        } catch {}
+      }
+
+      baseWidth = baseWidth || 800;
+      baseHeight = baseHeight || 600;
+
       const canvas = document.createElement("canvas");
-      canvas.width = img.naturalWidth * scale;
-      canvas.height = img.naturalHeight * scale;
+      canvas.width = Math.round(baseWidth * scale);
+      canvas.height = Math.round(baseHeight * scale);
       const ctx = canvas.getContext("2d")!;
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Pertahankan transparansi asli SVG (tanpa dipaksa putih)
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       const blob = await canvasToBlob(canvas);
       const url = URL.createObjectURL(blob);

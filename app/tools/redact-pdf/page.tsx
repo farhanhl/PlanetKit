@@ -41,13 +41,13 @@ export default function RedactPdfPage() {
     setProcessing(true);
     try {
       const newDoc = await PDFDocument.create();
-      const pagesToProcess = redactAll ? pages : [pages[selectedPage]];
-
-      for (const pageInfo of pagesToProcess) {
+      // Selalu sertakan semua halaman agar halaman lain tidak terhapus
+      for (const pageInfo of pages) {
         const [copiedPage] = await newDoc.copyPages(pdfDoc, [pageInfo.num - 1]);
         const page = newDoc.addPage(copiedPage);
 
-        const rects = redactions[pageInfo.num] || [];
+        const shouldRedact = redactAll || pageInfo.num === selectedPage + 1;
+        const rects = shouldRedact ? redactions[pageInfo.num] || [] : [];
         for (const rect of rects) {
           page.drawRectangle({
             x: rect.x,

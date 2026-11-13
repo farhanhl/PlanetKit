@@ -48,46 +48,70 @@ export default function InvoiceGeneratorPage() {
       page.drawText(`#${invoiceNo}`, { x: 50, y: 695, size: 12, color: rgb(0.5, 0.5, 0.5) });
       page.drawText(`Date: ${date}`, { x: width - 200, y: 720, size: 10, color: rgb(0.3, 0.3, 0.3) });
 
-      const drawTextBlock = (text: string, x: number, y: number) => {
+      let currentPage = page;
+      const cleanAscii = (str: string) => str.replace(/[^\x00-\x7F]/g, " ").trim();
+
+      const drawTextBlock = (text: string, x: number, startY: number) => {
         const lines = text.split("\n");
         lines.forEach((line, i) => {
-          page.drawText(line, { x, y: y - i * 16, size: 10, color: rgb(0.2, 0.2, 0.2) });
+          currentPage.drawText(cleanAscii(line), { x, y: startY - i * 16, size: 10, color: rgb(0.2, 0.2, 0.2) });
         });
       };
 
-      page.drawText("From:", { x: 50, y: 660, size: 10, color: rgb(0.5, 0.5, 0.5) });
+      currentPage.drawText("From:", { x: 50, y: 660, size: 10, color: rgb(0.5, 0.5, 0.5) });
       drawTextBlock(from, 50, 645);
-      page.drawText("To:", { x: 350, y: 660, size: 10, color: rgb(0.5, 0.5, 0.5) });
+      currentPage.drawText("To:", { x: 350, y: 660, size: 10, color: rgb(0.5, 0.5, 0.5) });
       drawTextBlock(to, 350, 645);
 
       let y = 530;
-      page.drawText("Description", { x: 50, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
-      page.drawText("Qty", { x: 350, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
-      page.drawText("Rate", { x: 420, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
-      page.drawText("Amount", { x: 500, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+      currentPage.drawText("Description", { x: 50, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+      currentPage.drawText("Qty", { x: 350, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+      currentPage.drawText("Rate", { x: 420, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+      currentPage.drawText("Amount", { x: 500, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
       y -= 20;
 
       for (const item of items) {
+        if (y < 120) {
+          currentPage = doc.addPage([595.28, 841.89]);
+          y = 780;
+          currentPage.drawText("Description", { x: 50, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+          currentPage.drawText("Qty", { x: 350, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+          currentPage.drawText("Rate", { x: 420, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+          currentPage.drawText("Amount", { x: 500, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+          y -= 20;
+        }
+
         const amt = item.quantity * item.rate;
-        page.drawText(item.description || "-", { x: 50, y, size: 10, color: rgb(0.2, 0.2, 0.2) });
-        page.drawText(String(item.quantity), { x: 350, y, size: 10, color: rgb(0.2, 0.2, 0.2) });
-        page.drawText(`${currency} ${item.rate.toFixed(2)}`, { x: 420, y, size: 10, color: rgb(0.2, 0.2, 0.2) });
-        page.drawText(`${currency} ${amt.toFixed(2)}`, { x: 500, y, size: 10, color: rgb(0.2, 0.2, 0.2) });
+        const cleanDesc = cleanAscii(item.description || "-").slice(0, 48);
+        currentPage.drawText(cleanDesc, { x: 50, y, size: 10, color: rgb(0.2, 0.2, 0.2) });
+        currentPage.drawText(String(item.quantity), { x: 350, y, size: 10, color: rgb(0.2, 0.2, 0.2) });
+        currentPage.drawText(`${cleanAscii(currency)} ${item.rate.toFixed(2)}`, { x: 420, y, size: 10, color: rgb(0.2, 0.2, 0.2) });
+        currentPage.drawText(`${cleanAscii(currency)} ${amt.toFixed(2)}`, { x: 500, y, size: 10, color: rgb(0.2, 0.2, 0.2) });
         y -= 20;
       }
 
+      if (y < 130) {
+        currentPage = doc.addPage([595.28, 841.89]);
+        y = 780;
+      }
+
       y -= 10;
-      page.drawLine({ start: { x: 50, y }, end: { x: width - 50, y }, thickness: 1, color: rgb(0.8, 0.8, 0.8) });
+      currentPage.drawLine({ start: { x: 50, y }, end: { x: width - 50, y }, thickness: 1, color: rgb(0.8, 0.8, 0.8) });
       y -= 20;
-      page.drawText(`Subtotal: ${currency} ${subtotal.toFixed(2)}`, { x: 400, y, size: 10, color: rgb(0.3, 0.3, 0.3) });
+      currentPage.drawText(`Subtotal: ${cleanAscii(currency)} ${subtotal.toFixed(2)}`, { x: 400, y, size: 10, color: rgb(0.3, 0.3, 0.3) });
       y -= 18;
-      page.drawText(`Tax (${tax}%): ${currency} ${taxAmount.toFixed(2)}`, { x: 400, y, size: 10, color: rgb(0.3, 0.3, 0.3) });
+      currentPage.drawText(`Tax (${tax}%): ${cleanAscii(currency)} ${taxAmount.toFixed(2)}`, { x: 400, y, size: 10, color: rgb(0.3, 0.3, 0.3) });
       y -= 22;
-      page.drawText(`Total: ${currency} ${total.toFixed(2)}`, { x: 400, y, size: 14, color: rgb(0.1, 0.1, 0.1) });
+      currentPage.drawText(`Total: ${cleanAscii(currency)} ${total.toFixed(2)}`, { x: 400, y, size: 14, color: rgb(0.1, 0.1, 0.1) });
 
       if (notes) {
-        y -= 50;
-        page.drawText("Notes:", { x: 50, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
+        if (y < 90) {
+          currentPage = doc.addPage([595.28, 841.89]);
+          y = 780;
+        } else {
+          y -= 40;
+        }
+        currentPage.drawText("Notes:", { x: 50, y, size: 10, color: rgb(0.5, 0.5, 0.5) });
         y -= 16;
         drawTextBlock(notes, 50, y);
       }

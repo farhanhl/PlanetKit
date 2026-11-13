@@ -65,15 +65,19 @@ export default function CompressPdfPage() {
         type: "application/pdf",
       });
 
+      // Jika proses kompresi justru menghasilkan ukuran lebih besar (misal file aslinya sudah teroptimasi),
+      // pertahankan file asli agar pengguna tidak dirugikan
+      const finalBlob = compressedBlob.size < file.size ? compressedBlob : file;
+
       setResult({
         originalSize: file.size,
-        compressedSize: compressedBlob.size,
+        compressedSize: finalBlob.size,
       });
 
-      const url = URL.createObjectURL(compressedBlob);
+      const url = URL.createObjectURL(finalBlob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "compressed.pdf";
+      a.download = `compressed_${file.name.replace(/\.pdf$/i, "")}.pdf`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 100);
     } catch {
@@ -85,7 +89,7 @@ export default function CompressPdfPage() {
   };
 
   const reduction = result
-    ? Math.round(((result.originalSize - result.compressedSize) / result.originalSize) * 100)
+    ? Math.max(0, Math.round(((result.originalSize - result.compressedSize) / result.originalSize) * 100))
     : 0;
 
   return (

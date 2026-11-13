@@ -49,20 +49,40 @@ export default function PdfToExcelPage() {
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
 
-        const lines: Record<number, string[]> = {};
-        for (const item of content.items) {
-          if (!("str" in item) || !item.str.trim()) continue;
-          const y = Math.round(item.transform[5]);
-          if (!lines[y]) lines[y] = [];
-          lines[y].push(item.str);
+        interface Token {
+          str: string;
+          x: number;
+          y: number;
         }
 
-        const sortedY = Object.keys(lines)
-          .map(Number)
-          .sort((a, b) => b - a);
+        const tokens: Token[] = [];
+        for (const item of content.items) {
+          if (!("str" in item) || !item.str.trim()) continue;
+          tokens.push({
+            str: item.str,
+            x: item.transform[4],
+            y: item.transform[5],
+          });
+        }
 
-        for (const y of sortedY) {
-          allRows.push(lines[y]);
+        // Kelompokkan baris berdasarkan koordinat Y dengan toleransi 3.5pt (Y-tolerance)
+        const rowGroups: { y: number; tokens: Token[] }[] = [];
+        for (const token of tokens) {
+          const existing = rowGroups.find((r) => Math.abs(r.y - token.y) <= 3.5);
+          if (existing) {
+            existing.tokens.push(token);
+          } else {
+            rowGroups.push({ y: token.y, tokens: [token] });
+          }
+        }
+
+        // Urutkan baris dari atas ke bawah (Y descending)
+        rowGroups.sort((a, b) => b.y - a.y);
+
+        // Untuk setiap baris, urutkan kata/kolom dari kiri ke kanan (X ascending)
+        for (const r of rowGroups) {
+          r.tokens.sort((a, b) => a.x - b.x);
+          allRows.push(r.tokens.map((t) => t.str));
         }
 
         if (i < pdf.numPages) {

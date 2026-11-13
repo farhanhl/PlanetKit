@@ -40,26 +40,41 @@ export default function HtmlToPdfPage() {
       const pdfH = isLandscape ? pw : ph;
 
       setProgress(20);
-      const container = document.createElement("div");
-      container.style.cssText = `position:fixed;left:-9999px;top:0;width:${pdfW}mm;background:#fff;padding:10mm;font-family:Helvetica,Arial,sans-serif;font-size:12pt;line-height:1.5;color:#000;`;
-      container.innerHTML = htmlContent;
-      document.body.appendChild(container);
+      // Gunakan isolated iframe agar style dan tag CSS tidak bocor ke website
+      const iframe = document.createElement("iframe");
+      iframe.style.cssText = "position:fixed;top:-99999px;left:-99999px;width:800px;border:none;visibility:hidden;";
+      document.body.appendChild(iframe);
+
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (!iframeDoc) {
+        document.body.removeChild(iframe);
+        throw new Error("Failed to create isolated document");
+      }
+
+      iframeDoc.open();
+      iframeDoc.write(htmlContent);
+      iframeDoc.close();
+
+      await new Promise((resolve) => setTimeout(resolve, 80));
 
       setProgress(40);
-      const canvas = await html2canvas.default(container, {
-        scale: 2,
+      const targetEl = iframeDoc.body;
+      const canvas = await html2canvas.default(targetEl, {
+        scale: 1.5,
         useCORS: true,
         backgroundColor: "#ffffff",
       });
-      document.body.removeChild(container);
+      document.body.removeChild(iframe);
 
-      setProgress(70);
-      const imgData = canvas.toDataURL("image/png");
-      const imgW = canvas.width;
-      const imgH = canvas.height;
-      const ratio = Math.min(pdfW / imgW, pdfH / imgH);
-      const scaledW = imgW * ratio;
-      const scaledH = imgH * ratio;
+      setProgress(60);
+      // Konfigurasi Margin & Ukuran Halaman
+      const marginX = 12; // 12mm margin
+      const marginY = 12;
+      const contentWidthMm = pdfW - marginX * 2;
+      const pageHeightMm = pdfH - marginY * 2;
+
+      const pxPerMm = canvas.width / contentWidthMm;
+      const sliceHeightPx = Math.floor(pageHeightMm * pxPerMm);
 
       const pdf = new jsPDF({
         orientation: isLandscape ? "landscape" : "portrait",
@@ -67,14 +82,43 @@ export default function HtmlToPdfPage() {
         format: pageSize,
       });
 
-      setProgress(85);
-      let yOffset = 0;
-      const pageContentH = pdfH;
+      let sourceY = 0;
+      let pageIndex = 0;
 
-      while (yOffset < scaledH) {
-        if (yOffset > 0) pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, -yOffset, scaledW, scaledH);
-        yOffset += pageContentH;
+      while (sourceY < canvas.height) {
+        if (pageIndex > 0) pdf.addPage();
+
+        const currentSlicePx = Math.min(sliceHeightPx, canvas.height - sourceY);
+        const currentSliceMm = currentSlicePx / pxPerMm;
+
+        const sliceCanvas = document.createElement("canvas");
+        sliceCanvas.width = canvas.width;
+        sliceCanvas.height = currentSlicePx;
+        const ctx = sliceCanvas.getContext("2d");
+
+        if (ctx) {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+          ctx.drawImage(
+            canvas,
+            0,
+            sourceY,
+            canvas.width,
+            currentSlicePx,
+            0,
+            0,
+            canvas.width,
+            currentSlicePx
+          );
+
+          // Gunakan JPEG kualitas 0.85 untuk kompresi file optimal (< 1 MB)
+          const imgData = sliceCanvas.toDataURL("image/jpeg", 0.85);
+          pdf.addImage(imgData, "JPEG", marginX, marginY, contentWidthMm, currentSliceMm, undefined, "FAST");
+        }
+
+        sourceY += currentSlicePx;
+        pageIndex++;
+        setProgress(60 + Math.min(35, (pageIndex / Math.ceil(canvas.height / sliceHeightPx)) * 35));
       }
 
       setProgress(100);

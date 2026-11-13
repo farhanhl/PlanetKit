@@ -69,6 +69,7 @@ export default function CropPdfPage() {
         const offsetY = Math.min(marginBottom, height - 1);
 
         page.setMediaBox(x + offsetX, y + offsetY, newW, newH);
+        page.setCropBox(x + offsetX, y + offsetY, newW, newH);
       }
 
       setProgress(90);

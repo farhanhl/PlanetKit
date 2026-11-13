@@ -83,9 +83,29 @@ export default function ImageFiltersPage() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     applyFilter();
+
+    const isJpeg = /\.jpe?g$/i.test(fileName);
+    const isWebp = /\.webp$/i.test(fileName);
+
     const link = document.createElement("a");
-    link.download = fileName || "filtered.png";
-    link.href = canvas.toDataURL("image/png");
+    link.download = fileName ? `filtered_${fileName}` : "filtered.png";
+
+    if (isJpeg) {
+      // Buat canvas sementara dengan background putih agar tidak menjadi hitam pekat saat diekspor ke JPEG
+      const outCanvas = document.createElement("canvas");
+      outCanvas.width = canvas.width;
+      outCanvas.height = canvas.height;
+      const ctx = outCanvas.getContext("2d")!;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+      ctx.drawImage(canvas, 0, 0);
+      link.href = outCanvas.toDataURL("image/jpeg", 0.92);
+    } else if (isWebp) {
+      link.href = canvas.toDataURL("image/webp", 0.92);
+    } else {
+      link.href = canvas.toDataURL("image/png");
+    }
+
     link.click();
   };
 

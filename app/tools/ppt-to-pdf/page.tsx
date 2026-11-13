@@ -28,8 +28,12 @@ export default function PptToPdfPage() {
       const zip = await JSZip.loadAsync(file);
 
       const slideFiles = Object.keys(zip.files)
-        .filter((n) => n.match(/ppt\/slides\/slide\d+\.xml$/))
-        .sort();
+        .filter((n) => /ppt\/slides\/slide\d+\.xml$/.test(n))
+        .sort((a, b) => {
+          const numA = parseInt(a.match(/slide(\d+)\.xml/)?.[1] || "0", 10);
+          const numB = parseInt(b.match(/slide(\d+)\.xml/)?.[1] || "0", 10);
+          return numA - numB;
+        });
 
       if (slideFiles.length === 0) throw new Error("No slides found");
 
@@ -50,7 +54,10 @@ export default function PptToPdfPage() {
           for (const text of texts) {
             const lines = pdf.splitTextToSize(text, 860);
             for (const line of lines) {
-              if (y > 500) break;
+              if (y > 500) {
+                pdf.addPage([960, 540], "landscape");
+                y = 50;
+              }
               pdf.text(line, 50, y);
               y += 18;
             }

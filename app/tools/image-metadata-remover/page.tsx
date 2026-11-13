@@ -11,7 +11,7 @@ interface ExifEntry {
   value: string;
 }
 
-function stripExif(dataUrl: string): Promise<string> {
+function stripExif(dataUrl: string, mimeType = "image/png"): Promise<string> {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {
@@ -19,8 +19,24 @@ function stripExif(dataUrl: string): Promise<string> {
       canvas.width = img.width;
       canvas.height = img.height;
       const ctx = canvas.getContext("2d")!;
+
+      const isJpeg = mimeType === "image/jpeg" || mimeType === "image/jpg";
+      const isWebp = mimeType === "image/webp";
+
+      if (isJpeg) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
       ctx.drawImage(img, 0, 0);
-      resolve(canvas.toDataURL("image/png"));
+
+      if (isJpeg) {
+        resolve(canvas.toDataURL("image/jpeg", 0.92));
+      } else if (isWebp) {
+        resolve(canvas.toDataURL("image/webp", 0.92));
+      } else {
+        resolve(canvas.toDataURL("image/png"));
+      }
     };
     img.onerror = () => resolve(dataUrl);
     img.src = dataUrl;
@@ -57,7 +73,7 @@ export default function ImageMetadataRemoverPage() {
         { tag: t.metaOriginalSize, value: file ? `${(file.size / 1024).toFixed(1)} KB` : "-" },
         { tag: t.metaFormat, value: file?.type || "-" },
       ]);
-      const result = await stripExif(preview);
+      const result = await stripExif(preview, file?.type || "image/png");
       setCleaned(result);
     } catch {} finally {
       setProcessing(false);

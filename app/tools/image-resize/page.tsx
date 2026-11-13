@@ -81,13 +81,22 @@ export default function ImageResizePage() {
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext("2d")!;
+      const isJpeg = file.type === "image/jpeg" || file.type === "image/jpg";
+      const isWebp = file.type === "image/webp";
+      const mimeType = isJpeg ? "image/jpeg" : isWebp ? "image/webp" : "image/png";
+      const ext = isJpeg ? "jpg" : isWebp ? "webp" : "png";
+
+      if (isJpeg) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+      }
       ctx.drawImage(img, sx, sy, sw, sh, 0, 0, width, height);
 
-      const blob = await canvasToBlob(canvas, "image/png");
+      const blob = await canvasToBlob(canvas, mimeType, 0.92);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `resized_${file.name.replace(/\.[^.]+$/, "")}.png`;
+      a.download = `resized_${file.name.replace(/\.[^.]+$/, "")}.${ext}`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 100);
     } catch {
@@ -208,11 +217,11 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-function canvasToBlob(canvas: HTMLCanvasElement, type: string): Promise<Blob> {
+function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number): Promise<Blob> {
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (blob) resolve(blob);
       else reject(new Error("Canvas toBlob failed"));
-    }, type);
+    }, type, quality);
   });
 }

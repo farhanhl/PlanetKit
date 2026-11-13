@@ -46,21 +46,63 @@ export default function ImageToPdfPage() {
       for (let i = 0; i < files.length; i++) {
         setProgress(((i + 1) / files.length) * 90);
         const file = files[i];
-        const bytes = await file.arrayBuffer();
 
         let image;
-        if (file.name.toLowerCase().endsWith(".png")) {
+        const isPng = file.type === "image/png" || file.name.toLowerCase().endsWith(".png");
+        const isJpg = file.type === "image/jpeg" || /\.jpe?g$/i.test(file.name);
+
+        if (isPng) {
+          const bytes = await file.arrayBuffer();
           image = await pdf.embedPng(bytes);
+        } else if (isJpg) {
+          const bytes = await file.arrayBuffer();
+          image = await pdf.embedJpg(bytes);
         } else {
+          // Format WebP, BMP, GIF: render ke canvas dan convert ke JPEG agar tidak melempar error Invalid JPEG
+          const objUrl = URL.createObjectURL(file);
+          const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+            const el = new Image();
+            el.onload = () => resolve(el);
+            el.onerror = reject;
+            el.src = objUrl;
+          });
+          const canvas = document.createElement("canvas");
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          const ctx = canvas.getContext("2d")!;
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+          const blob = await new Promise<Blob>((resolve) =>
+            canvas.toBlob((b) => resolve(b!), "image/jpeg", 0.9)
+          );
+          URL.revokeObjectURL(objUrl);
+          const bytes = await blob.arrayBuffer();
           image = await pdf.embedJpg(bytes);
         }
 
-        const page = pdf.addPage([image.width, image.height]);
+        // Ukuran standar A4 dalam points (595.28 x 841.89) dengan margin
+        const a4W = 595.28;
+        const a4H = 841.89;
+        const isLandscape = image.width > image.height;
+        const pageW = isLandscape ? a4H : a4W;
+        const pageH = isLandscape ? a4W : a4H;
+
+        const margin = 28;
+        const maxW = pageW - margin * 2;
+        const maxH = pageH - margin * 2;
+        const scale = Math.min(maxW / image.width, maxH / image.height);
+        const drawW = image.width * scale;
+        const drawH = image.height * scale;
+        const x = (pageW - drawW) / 2;
+        const y = (pageH - drawH) / 2;
+
+        const page = pdf.addPage([pageW, pageH]);
         page.drawImage(image, {
-          x: 0,
-          y: 0,
-          width: image.width,
-          height: image.height,
+          x,
+          y,
+          width: drawW,
+          height: drawH,
         });
       }
 
